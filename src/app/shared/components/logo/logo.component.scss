@@ -1,0 +1,23 @@
+div {
+  background: rgba(255, 255, 255, 0.80);
+  border-radius: 10px;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  width: fit-content;
+  height: fit-content;
+  padding: 10px 20px;
+
+  h1 {
+    margin: 0;
+    white-space: nowrap;
+    
+    i{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+  }
+}

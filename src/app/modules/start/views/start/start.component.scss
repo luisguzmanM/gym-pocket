@@ -1,0 +1,41 @@
+ion-content {
+  --ion-background-color: url('./../../../../../assets/start/start.gif') center center/cover no-repeat;
+  --overflow: hidden !important;
+}
+
+app-logo {
+  position: absolute;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, -10%);
+}
+
+ul {
+  background-color: rgba(0,0,0,0.5);
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translate(-50%, -25%);
+  border-radius: 10px;
+  padding: 20px;
+
+  li {
+    list-style: none;
+    white-space: nowrap;
+    margin: 0;
+    color: white;
+    font-style: italic;
+  }
+}
+
+ion-button {
+  position: absolute;
+  bottom: 15%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+h2 {
+  font-size: 16px;
+  color: white;
+}

@@ -1,0 +1,32 @@
+<ion-content [fullscreen]="true">
+  <app-logo></app-logo>
+
+  <ul>
+    <li>
+      <ion-icon name="accessibility-outline"></ion-icon>
+      Registra a tus usuarios
+    </li>
+    <li>
+      <ion-icon name="calendar-number-outline"></ion-icon>
+      Entérate de sus fecha de pago
+    </li>
+    <li>
+      <ion-icon name="notifications-outline"></ion-icon>
+      Envíales recordatorios
+    </li>
+    <li>
+      <ion-icon name="information-circle-outline"></ion-icon>
+      Toda la información en tu smartphone
+    </li>
+  </ul>
+
+  <ion-button
+    expand="block"
+    color="dark"
+    class="ion-text-uppercase"
+    (click)="comenzar()"
+  >
+    {{ empezarButtonText }}
+    <ion-icon name="arrow-forward-outline"></ion-icon>
+  </ion-button>
+</ion-content>

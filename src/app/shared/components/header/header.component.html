@@ -1,0 +1,17 @@
+<ion-header> <!-- Si quiero quitar la linea de abajo usar -> class="ion-no-border" -->
+  <ion-toolbar>
+    @if (showBackButton) {
+      <ion-button fill="clear" slot="start" (click)="handleBackButton()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    }
+
+    <ion-title>{{ title }}</ion-title>
+
+    @if (showAuxiliaryButton) {
+      <ion-button fill="clear" slot="end" (click)="handleAuxiliaryButton()">
+        <ion-icon [name]="auxiliaryButtonIconName"></ion-icon>
+      </ion-button>
+    }
+  </ion-toolbar>
+</ion-header>
