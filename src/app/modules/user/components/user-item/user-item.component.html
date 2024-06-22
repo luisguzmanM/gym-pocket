@@ -1,3 +1,11 @@
-<p>
-  user-item works!
-</p>
+<ion-item>
+  <ion-avatar slot="start">
+    <img [src]="user.photoURL" />
+  </ion-avatar>
+  <span>
+    <p>{{ user.firstName }}</p>
+    <p>{{ user.lastName }}</p>
+  </span>
+  <span class="separator"></span>
+  <span class="status" [ngClass]="user.isPaymentDue ? 'overdue' : 'paid'"></span>
+</ion-item>

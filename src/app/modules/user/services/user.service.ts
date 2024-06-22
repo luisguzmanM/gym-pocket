@@ -1,33 +1,33 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
+import { initializeApp } from 'firebase/app';
+import { Firestore, collection, getDocs, getFirestore } from 'firebase/firestore';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  users : User[] = [
-    {
-      firstName: 'John',
-      lastName: 'Doe',
-      dateOfBirth: '24-12-1992',
-      docType: 'Cedula',
-      docNumber: 20278065,
-      startDate: '21-06-2024',
-      phoneNumber: 999888777,
-      photo: 'https://abc123.jpg',
-      isPaymentDue: true,
-      id: 'abc123',
-      weight: 86
-    }
-  ];;
+  public firestoreInstance: Firestore;
+  private app = initializeApp(environment.firebaseConfig);
+  private db = getFirestore(this.app);
 
-  constructor(
+  users : User[] = [];
 
-  ) { }
+  constructor() {
+    this.firestoreInstance = getFirestore();
+  }
 
-  // Here I need to get the users from firestore database
-  async getUserList():Promise<User[]>{
+  async getClientList():Promise<User[]>{
+    const querySnapshot = await getDocs(collection(this.db, 'clientsOfMyUsers'));
+
+    querySnapshot.forEach(doc => {
+      const dataClient = doc.data() as User;
+      dataClient.userID = doc.id;
+      this.users.push(dataClient);
+    })
+
     return this.users;
   }
 }

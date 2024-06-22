@@ -1,15 +1,16 @@
 export type User = {
+  userID: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
-  docType: string;
+  typeDocIdentity: string;
   docNumber: number;
   startDate: string;
+  countryCode: number
   phoneNumber: number;
-  photo: string;
+  photoURL: string;
   isPaymentDue: boolean;
-  id: string;
-  weight: number;
+  error?:any
 }
 
 export interface UserListState {

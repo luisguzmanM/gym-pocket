@@ -4,6 +4,7 @@ import { UserRoutingModule } from './user.routes';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 import { UserListComponent } from './views/user-list/user-list.component';
 import { UserItemComponent } from './components/user-item/user-item.component';
+import { IonicModule } from '@ionic/angular';
 
 
 
@@ -14,6 +15,7 @@ import { UserItemComponent } from './components/user-item/user-item.component';
   ],
   imports: [
     CommonModule,
+    IonicModule,
     UserRoutingModule,
     HeaderComponent
   ]

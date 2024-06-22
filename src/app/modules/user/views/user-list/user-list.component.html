@@ -1,6 +1,30 @@
 <app-header 
   title="Lista de usuarios" 
   [showBackButton]="false"
-  [showAuxiliaryButton]="false"
+  [showAuxiliaryButton]="true"
   auxiliaryButtonIconName="ellipsis-vertical-outline"
 ></app-header>
+
+<ion-content>
+  @if (loading$ | async) {
+    <div class="d-flex ion-align-items-center ion-justify-content-center full-width full-height">
+      <ion-spinner></ion-spinner>
+    </div>
+  }
+
+  @if ((loading$ | async) === false){
+    <ion-list>
+      @for (user of (userList$ | async); track $index) {
+        <app-user-item 
+          [user]="user"
+        ></app-user-item>
+      }
+    </ion-list>
+  }
+
+  @if(!(loading$ | async) && (userList$ | async)?.length === 0){
+    <div class="d-flex full-width full-height ion-align-items-center ion-justify-content-center">
+      <p>No hay usuarios registrados aún.</p>
+    </div>
+  }
+</ion-content>
