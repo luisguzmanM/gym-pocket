@@ -1,0 +1,85 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-button fill="clear" slot="start" (click)="closeModal()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+
+    <ion-title>Nuevo usuario</ion-title>
+
+    <ion-button fill="clear" slot="end" [disabled]="formCtrl.invalid || loading">
+      Guardar
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  @if(loading){
+    <ion-spinner name="lines"></ion-spinner>
+  }
+
+  @if(!loading){
+    <form class="ion-padding" [formGroup]="formCtrl">
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Nombres</ion-label>
+        <ion-input type="text" placeholder="Steve Ryan" formControlName="firstName"></ion-input>
+      </ion-item>
+  
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Apellidos</ion-label>
+        <ion-input type="text" placeholder="Smith Johnson" formControlName="lastName"></ion-input>
+      </ion-item>
+  
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Fecha nacimiento</ion-label>
+        <ion-input type="date" placeholder="01/01/1992" formControlName="dateOfBirth"></ion-input>
+      </ion-item>
+  
+      <ion-list>
+        <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+          <ion-label position="floating">Tipo de documento</ion-label>
+          <ion-select interface="popover" formControlName="docType">
+            <ion-select-option value="ci">Cédula</ion-select-option>
+            <ion-select-option value="passport" >Pasaporte</ion-select-option>
+            <ion-select-option value="other">Otro</ion-select-option>
+          </ion-select>
+        </ion-item>
+      </ion-list>
+  
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Nro. documento</ion-label>
+        <ion-input type="number" placeholder="20278000" formControlName="docNumber"></ion-input>
+      </ion-item>
+
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Nro. celular</ion-label>
+        <ion-input type="number" placeholder="999888777" formControlName="phoneNumber"></ion-input>
+      </ion-item>
+
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Peso actual</ion-label>
+        <ion-input type="number" placeholder="50" formControlName="weight"></ion-input>
+      </ion-item>
+  
+      <ion-item fill="outline" mode="md" class="ion-margin-bottom">
+        <ion-label position="floating">Inicio</ion-label>
+        <ion-input type="date" placeholder="01/01/2023" formControlName="startDate"></ion-input>
+      </ion-item>
+  
+      <div class="d-flex ion-justify-content-between ion-align-items-center">
+        @if (!formCtrl.value.photo) {
+          <p>Cargar foto</p>
+        }
+        @if(formCtrl.value.photo){
+          <ion-avatar>
+            <img [src]="formCtrl.value.photo" />
+          </ion-avatar>
+        }
+        <ion-button fill="outline">
+          <ion-icon name="camera"></ion-icon>
+        </ion-button>
+      </div>
+    </form>
+  }
+
+</ion-content>

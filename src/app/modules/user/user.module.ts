@@ -5,16 +5,20 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
 import { UserListComponent } from './views/user-list/user-list.component';
 import { UserItemComponent } from './components/user-item/user-item.component';
 import { IonicModule } from '@ionic/angular';
+import { UserRegistrationModalComponent } from './components/user-registration-modal/user-registration-modal.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
 @NgModule({
   declarations: [
     UserListComponent,
-    UserItemComponent
+    UserItemComponent,
+    UserRegistrationModalComponent
   ],
   imports: [
     CommonModule,
+    ReactiveFormsModule,
     IonicModule,
     UserRoutingModule,
     HeaderComponent

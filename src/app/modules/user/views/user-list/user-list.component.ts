@@ -6,6 +6,8 @@ import { UserService } from '../../services/user.service';
 import { loadUserList, loadUserListSuccess } from 'src/app/state/actions/user.actions';
 import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
+import { ModalController } from '@ionic/angular';
+import { UserRegistrationModalComponent } from '../../components/user-registration-modal/user-registration-modal.component';
 
 @Component({
   selector: 'app-user-list',
@@ -19,7 +21,8 @@ export class UserListComponent  implements OnInit {
 
   constructor(
     private _store: Store<AppState>,
-    private _userSvc: UserService
+    private _userSvc: UserService,
+    private _modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
@@ -30,6 +33,13 @@ export class UserListComponent  implements OnInit {
     this._store.dispatch(loadUserList());
     const userList = await this._userSvc.getClientList(); // Get clients from database.
     this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
+  }
+
+  async openUserRegistrationModal() {
+    const modal = await this._modalCtrl.create({
+      component: UserRegistrationModalComponent,
+    });
+    modal.present();
   }
 
 }

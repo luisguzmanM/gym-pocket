@@ -6,11 +6,7 @@
     </div>
 
     <p class="ion-text-center ion-padding-horizontal">
-      Crea una cuenta para que puedas guardar tu base de datos de usuarios y enterarte de sus fechas de pago.
-    </p>
-
-    <p>
-      No se necesita ingresar tarjeta de crédito o débito.
+      Crea tu cuenta y registra a los clientes de tu gimnasio. No se requiere tarjeta de crédito o débito
     </p>
   
     <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
@@ -45,7 +41,7 @@
 
     </form>
 
-    <p>¿Ya tienes una cuenta?</p>
+    <p class="ion-margin-top ion-margin-bottom">¿Ya tienes una cuenta?</p>
     <ion-button fill="clear" (click)="goToLoginView()">Inicia sesión</ion-button>
 
   </div>

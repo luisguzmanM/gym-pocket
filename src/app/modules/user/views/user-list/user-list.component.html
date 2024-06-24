@@ -2,7 +2,8 @@
   title="Lista de usuarios" 
   [showBackButton]="false"
   [showAuxiliaryButton]="true"
-  auxiliaryButtonIconName="ellipsis-vertical-outline"
+  auxiliaryButtonIconName="add-circle-outline"
+  (auxiliaryButtonEmitter)="openUserRegistrationModal()"
 ></app-header>
 
 <ion-content>
@@ -23,8 +24,10 @@
   }
 
   @if(!(loading$ | async) && (userList$ | async)?.length === 0){
-    <div class="d-flex full-width full-height ion-align-items-center ion-justify-content-center">
-      <p>No hay usuarios registrados aún.</p>
+    <div class="full-width ion-text-center center-v">
+      <h3>No hay clientes registrados aún</h3>
+      <p>Registra un cliente y mantente informado</p>
+      <ion-button fill="solid" class="ion-margin-top" (click)="openUserRegistrationModal()">Empezar</ion-button>
     </div>
   }
 </ion-content>

@@ -25,7 +25,7 @@ export class UserService {
     querySnapshot.forEach(doc => {
       const dataClient = doc.data() as User;
       dataClient.userID = doc.id;
-      this.users.push(dataClient);
+      // this.users.push(dataClient);
     })
 
     return this.users;
