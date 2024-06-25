@@ -20,18 +20,34 @@ export class UserRegistrationModalComponent  implements OnInit {
     docNumber: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
     startDate: new FormControl('', Validators.required),
+    countryCode: new FormControl('', Validators.required),
     photo: new FormControl('', [Validators.required]),
-    weight: new FormControl('', [Validators.required])
   });
 
   constructor(
     private _modalCtrl: ModalController,
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.capitalizeFormControl('firstName');
+    this.capitalizeFormControl('lastName');
+  }
 
   closeModal(): void {
     this._modalCtrl.dismiss();
+  }
+
+  capitalizeFormControl(controlName: string) {
+    this.formCtrl.get(controlName)?.valueChanges.subscribe(value => {
+      const capitalizedValue = this.capitalizeWords(value);
+      if (value !== capitalizedValue) {
+        this.formCtrl.get(controlName)?.setValue(capitalizedValue, { emitEvent: false });
+      }
+    });
+  }
+
+  capitalizeWords(input: string): string {
+    return input.replace(/\b\w/g, char => char.toUpperCase());
   }
 
 }
