@@ -1,10 +1,10 @@
 export type User = {
-  userID: string;
+  customerID: string;
   firstName: string;
   lastName: string;
   dateOfBirth: string;
   typeDocIdentity: string;
-  docNumber: number;
+  docNumber: string;
   startDate: string;
   countryCode: number
   phoneNumber: number;

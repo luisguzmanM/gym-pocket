@@ -70,3 +70,5 @@ testem.log
 Thumbs.db
 # Ignorar archivo de variables de entorno
 src/environments/variables.ts
+/android
+/www

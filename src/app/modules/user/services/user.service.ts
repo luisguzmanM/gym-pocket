@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { initializeApp } from 'firebase/app';
-import { Firestore, collection, getDocs, getFirestore } from 'firebase/firestore';
+import { Firestore, addDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -12,7 +12,6 @@ export class UserService {
   public firestoreInstance: Firestore;
   private app = initializeApp(environment.firebaseConfig);
   private db = getFirestore(this.app);
-
   users : User[] = [];
 
   constructor() {
@@ -24,10 +23,41 @@ export class UserService {
 
     querySnapshot.forEach(doc => {
       const dataClient = doc.data() as User;
-      dataClient.userID = doc.id;
-      // this.users.push(dataClient);
+      dataClient.customerID = doc.id;
+      this.users.push(dataClient);
     })
 
     return this.users;
   }
+  
+  async insertNewCustomer(user: User) {
+    const { 
+      customerID,
+      firstName, 
+      lastName, 
+      dateOfBirth, 
+      typeDocIdentity, 
+      docNumber, 
+      countryCode, 
+      phoneNumber, 
+      startDate, 
+      photoURL,
+    } = user;
+
+    const docRef = await addDoc(collection(this.db, 'clientsOfMyUsers'), {
+      customerID: customerID,
+      firstName: firstName,
+      lastName: lastName,
+      dateOfBirth: dateOfBirth,
+      typeDocIdentity: typeDocIdentity,
+      docNumber: docNumber,
+      countryCode: countryCode,
+      phoneNumber: phoneNumber,
+      startDate: startDate,
+      photoURL: photoURL
+    })
+
+    return docRef;
+  }
+
 }
