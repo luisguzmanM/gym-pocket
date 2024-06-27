@@ -13,6 +13,7 @@ import { UserService } from '../../services/user.service';
 export class UserRegistrationModalComponent  implements OnInit {
 
   loading: boolean = false;
+  customerPhoto: any = {};
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -56,16 +57,15 @@ export class UserRegistrationModalComponent  implements OnInit {
 
   async takePhotoWithCamera() {
     try {
-      const photo = await this._cameraSvc.takePicture();
-      this.formCtrl.controls['photoURL'].setValue(photo.dataUrl);
+      this.customerPhoto = await this._cameraSvc.takePicture();
+      // Mostrar la foto en la UI para que el usuario sepa que la tomó bien.
+      this.formCtrl.controls['photoURL'].setValue(this.customerPhoto.dataUrl);
     } catch (error) {
       console.log('Error ', error)
     }
   }
 
   prepareCustomerInfoToSend() {
-    this.loading = true;
-
     const payload = {
       customerID: '',
       firstName: this.formCtrl.controls['firstName'].value,
@@ -79,19 +79,23 @@ export class UserRegistrationModalComponent  implements OnInit {
       photoURL: this.formCtrl.controls['photoURL'].value,
       isPaymentDue: false,
     }
-
-    this.saveCustomerInfo(payload);
+    return payload;
   }
 
-  async saveCustomerInfo(customerInfo:User){
+  async saveCustomerInfo(){
+    this.loading = true;
     try {
-      const customer = await this._userSvc.insertNewCustomer(customerInfo);
-      // TODO-> Guardar la foto con la url correcta luego de registrar al usuario.
-      console.log("Document written with ID: ", customer.id);
+      const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage(this.customerPhoto);
+      const photoURL = await photoUploaded.ref.getDownloadURL();
+      this.formCtrl.controls['photoURL'].setValue(photoURL);
+      const payload = this.prepareCustomerInfoToSend();
+      const customer = await this._userSvc.insertNewCustomer(payload);
+      console.log('formCtrl.value: ', this.formCtrl.value);
+      console.log("Customer id 👽", customer.id);
       this.loading = false;
       this._modalCtrl.dismiss();
     } catch (error) {
-      console.log('Error ', error);
+      console.log('Error: ', error);
     }
   }
 
