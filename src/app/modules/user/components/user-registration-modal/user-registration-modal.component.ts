@@ -14,6 +14,7 @@ export class UserRegistrationModalComponent  implements OnInit {
 
   loading: boolean = false;
   customerPhoto: any = {};
+  defaultPhotoURL: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -24,7 +25,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     countryCode: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
     startDate: new FormControl('', Validators.required),
-    photoURL: new FormControl('', [Validators.required]),
+    photoURL: new FormControl('')
   });
 
   constructor(
@@ -84,9 +85,13 @@ export class UserRegistrationModalComponent  implements OnInit {
   async saveCustomerInfo(){
     this.loading = true;
     try {
-      const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage(this.customerPhoto);
-      const photoURL = await photoUploaded.ref.getDownloadURL();
-      this.formCtrl.controls['photoURL'].setValue(photoURL);
+      if(this.formCtrl.controls['photoURL'].value !== ''){
+        const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage(this.customerPhoto);
+        const photoURL = await photoUploaded.ref.getDownloadURL();
+        this.formCtrl.controls['photoURL'].setValue(photoURL);
+      } else {
+        this.formCtrl.controls['photoURL'].setValue(this.defaultPhotoURL);
+      }
       const payload = this.prepareCustomerInfoToSend();
       const customer = await this._userSvc.insertNewCustomer(payload);
       const customerObject = customer.data();
