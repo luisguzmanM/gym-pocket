@@ -18,6 +18,7 @@ export class UserListComponent  implements OnInit {
 
   userList$: Observable<User[]> = this._store.select((selectUsers));
   loading$: Observable<boolean> = this._store.select((selectLoading));
+  lastAddedUserID: string | null = null;
 
   constructor(
     private _store: Store<AppState>,
@@ -44,7 +45,15 @@ export class UserListComponent  implements OnInit {
 
     modal.onDidDismiss().then(customer => {
       this._store.dispatch(addUser({ user: customer.data }));
+      this.lastAddedUserID = customer.data.customerID;
+      setTimeout(() => {
+        this.lastAddedUserID = null;
+      }, 3000)
     })
+  }
+
+  isLastAddedUser(userId: string): boolean {
+    return this.lastAddedUserID === userId;
   }
 
 }

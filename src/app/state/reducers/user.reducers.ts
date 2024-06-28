@@ -13,5 +13,5 @@ export const userListReducer = createReducer(
   on(loadUserList, state => ({ ...state, loading: true })),
   on(loadUserListSuccess, (state, { users }) => ({ ...state, loading: false, users })),
   on(updateMembershipState, (state, { user }) => ({ ...state, users: state.users.map(u => u.customerID === user.customerID ? user : u)})),
-  on(addUser, (state, {user}) => ({...state, users: [...state.users, user]})) 
+  on(addUser, (state, {user}) => ({...state, users: [user, ...state.users]})) 
 );
