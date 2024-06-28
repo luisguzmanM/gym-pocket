@@ -13,7 +13,7 @@
     </div>
   }
 
-  @if ((loading$ | async) === false){
+  @if ((loading$ | async) === false && isConnected){
     <ion-list>
       @for (user of (userList$ | async); track $index) {
         <app-user-item 
@@ -24,11 +24,19 @@
     </ion-list>
   }
 
-  @if(!(loading$ | async) && (userList$ | async)?.length === 0){
+  @if(!(loading$ | async) && (userList$ | async)?.length === 0 && isConnected){
     <div class="full-width ion-text-center center-v">
       <h3>No hay clientes registrados aún</h3>
       <p>Registra un cliente y mantente informado</p>
       <ion-button fill="solid" class="ion-margin-top" (click)="openUserRegistrationModal()">Empezar</ion-button>
+    </div>
+  }
+
+  @if(!(loading$ | async) && !isConnected){
+    <div class="full-width ion-text-center center-v">
+      <ion-icon name="wifi-outline" size="large" color="danger"></ion-icon>
+      <h3>Hubo un problema</h3>
+      <p>Por favor, verifica tu conexión a internet</p>
     </div>
   }
 </ion-content>

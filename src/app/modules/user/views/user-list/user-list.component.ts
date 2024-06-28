@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
@@ -19,6 +19,7 @@ export class UserListComponent  implements OnInit {
   userList$: Observable<User[]> = this._store.select((selectUsers));
   loading$: Observable<boolean> = this._store.select((selectLoading));
   lastAddedUserID: string | null = null;
+  isConnected:boolean = true;
 
   constructor(
     private _store: Store<AppState>,
@@ -31,9 +32,13 @@ export class UserListComponent  implements OnInit {
   }
 
   async getUserList() {
-    this._store.dispatch(loadUserList());
-    const userList = await this._userSvc.getCustomerList(); // Get clients from database.
-    this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
+    try {
+      this._store.dispatch(loadUserList());
+      const userList = await this._userSvc.getCustomerList(); // Get clients from database.
+      this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
+    } catch (error) {
+      this.isConnected = false;
+    }
   }
 
   async openUserRegistrationModal() {
@@ -54,6 +59,22 @@ export class UserListComponent  implements OnInit {
 
   isLastAddedUser(userId: string): boolean {
     return this.lastAddedUserID === userId;
+  }
+
+  @HostListener('window:online', ['$event'])
+  onOnline(event: Event) {
+    console.log('Network connected!');
+    this.isConnected = true;
+  }
+
+  @HostListener('window:offline', ['$event'])
+  onOffline(event: Event) {
+    console.log('Network was disconnected :-(');
+    this.isConnected = false;
+  }
+
+  checkNetworkStatus() {
+    this.isConnected = navigator.onLine;
   }
 
 }
