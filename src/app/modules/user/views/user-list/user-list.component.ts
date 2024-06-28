@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
 import { UserService } from '../../services/user.service';
-import { loadUserList, loadUserListSuccess } from 'src/app/state/actions/user.actions';
+import { addUser, loadUserList, loadUserListSuccess } from 'src/app/state/actions/user.actions';
 import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
 import { ModalController } from '@ionic/angular';
@@ -31,7 +31,7 @@ export class UserListComponent  implements OnInit {
 
   async getUserList() {
     this._store.dispatch(loadUserList());
-    const userList = await this._userSvc.getClientList(); // Get clients from database.
+    const userList = await this._userSvc.getCustomerList(); // Get clients from database.
     this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
   }
 
@@ -39,7 +39,12 @@ export class UserListComponent  implements OnInit {
     const modal = await this._modalCtrl.create({
       component: UserRegistrationModalComponent,
     });
+
     modal.present();
+
+    modal.onDidDismiss().then(customer => {
+      this._store.dispatch(addUser({ user: customer.data }));
+    })
   }
 
 }

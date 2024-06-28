@@ -58,7 +58,6 @@ export class UserRegistrationModalComponent  implements OnInit {
   async takePhotoWithCamera() {
     try {
       this.customerPhoto = await this._cameraSvc.takePicture();
-      // Mostrar la foto en la UI para que el usuario sepa que la tomó bien.
       this.formCtrl.controls['photoURL'].setValue(this.customerPhoto.dataUrl);
     } catch (error) {
       console.log('Error ', error)
@@ -90,10 +89,12 @@ export class UserRegistrationModalComponent  implements OnInit {
       this.formCtrl.controls['photoURL'].setValue(photoURL);
       const payload = this.prepareCustomerInfoToSend();
       const customer = await this._userSvc.insertNewCustomer(payload);
-      console.log('formCtrl.value: ', this.formCtrl.value);
-      console.log("Customer id 👽", customer.id);
+      const customerObject = customer.data();
+      if(customerObject){
+        customerObject['customerID'] = customer.id;
+      }
       this.loading = false;
-      this._modalCtrl.dismiss();
+      this._modalCtrl.dismiss(customerObject);
     } catch (error) {
       console.log('Error: ', error);
     }

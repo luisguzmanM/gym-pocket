@@ -1,6 +1,6 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button fill="clear" slot="start" (click)="closeModal()">
+    <ion-button fill="clear" slot="start" (click)="closeModal()" [disabled]="loading">
       <ion-icon name="close-outline"></ion-icon>
     </ion-button>
     <ion-title>Nuevo cliente</ion-title>
@@ -13,7 +13,9 @@
 <ion-content>
 
   @if(loading){
-    <ion-spinner name="lines"></ion-spinner>
+    <div class="d-flex ion-align-items-center ion-justify-content-center full-width full-height">
+      <ion-spinner></ion-spinner>
+    </div>
   }
 
   @if(!loading){

@@ -15,3 +15,8 @@ export const updateMembershipState = createAction(
   '[User List] Update Membership State',
   props<{ user: User }>()
 );
+
+export const addUser = createAction(
+  '[User] Add User',
+  props<{ user: User }>()
+);
