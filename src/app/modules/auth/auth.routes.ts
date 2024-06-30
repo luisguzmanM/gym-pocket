@@ -3,9 +3,9 @@ import { SignupComponent } from "./views/signup/signup.component";
 import { LoginComponent } from "./views/login/login.component";
 
 const AUTH_ROUTES : Routes = [
-  { path: '', redirectTo: 'signup', pathMatch: 'full' },
-  { path: 'signup', component: SignupComponent },
+  { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
 ];
 
 export const AuthRoutingModule = RouterModule.forChild(AUTH_ROUTES);
