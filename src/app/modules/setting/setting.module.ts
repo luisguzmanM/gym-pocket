@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SettingRoutingModule } from './setting.routes';
 import { IonicModule } from '@ionic/angular';
 import { SettingComponent } from './views/setting/setting.component';
+import { HeaderComponent } from 'src/app/shared/components/header/header.component';
 
 
 
@@ -13,7 +14,8 @@ import { SettingComponent } from './views/setting/setting.component';
   imports: [
     CommonModule,
     IonicModule,
-    SettingRoutingModule
+    SettingRoutingModule,
+    HeaderComponent
   ]
 })
 export class SettingModule { }
