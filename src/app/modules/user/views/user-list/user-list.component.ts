@@ -9,6 +9,11 @@ import { Observable } from 'rxjs';
 import { ModalController } from '@ionic/angular';
 import { UserRegistrationModalComponent } from '../../components/user-registration-modal/user-registration-modal.component';
 
+import { Platform } from '@ionic/angular';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+import { App } from '@capacitor/app';
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -25,10 +30,29 @@ export class UserListComponent  implements OnInit {
     private _store: Store<AppState>,
     private _userSvc: UserService,
     private _modalCtrl: ModalController,
+    private _platform: Platform,
+    private _location: Location,
+    private _router: Router
   ) { }
 
   ngOnInit() {
+    this.checkNetworkStatus();
+    this.initializeApp();
     this.getUserList();
+  }
+
+  initializeApp() {
+    this._platform.ready().then(() => {
+      this._platform.backButton.subscribeWithPriority(10, () => {
+        const currentUrl = this._router.url;
+        const mainRoute = '/main/';
+        if (currentUrl.startsWith(mainRoute)) {
+          App.exitApp();
+        } else {
+          this._location.back();
+        }
+      });
+    });
   }
 
   async getUserList() {
@@ -49,6 +73,7 @@ export class UserListComponent  implements OnInit {
     modal.present();
 
     modal.onDidDismiss().then(customer => {
+      if(!customer.data) return;
       this._store.dispatch(addUser({ user: customer.data }));
       this.lastAddedUserID = customer.data.customerID;
       setTimeout(() => {
@@ -65,6 +90,7 @@ export class UserListComponent  implements OnInit {
   onOnline(event: Event) {
     console.log('Network connected!');
     this.isConnected = true;
+    this.getUserList();
   }
 
   @HostListener('window:offline', ['$event'])
