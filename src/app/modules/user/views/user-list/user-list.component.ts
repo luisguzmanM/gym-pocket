@@ -58,7 +58,7 @@ export class UserListComponent  implements OnInit {
   async getUserList() {
     try {
       this._store.dispatch(loadUserList());
-      const userList = await this._userSvc.getCustomerList(); // Get clients from database.
+      const userList = await this._userSvc.getAffiliateList(); // Get clients from database.
       this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
     } catch (error) {
       this.isConnected = false;

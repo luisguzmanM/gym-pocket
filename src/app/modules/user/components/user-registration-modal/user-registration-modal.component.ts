@@ -93,7 +93,7 @@ export class UserRegistrationModalComponent  implements OnInit {
         this.formCtrl.controls['photoURL'].setValue(this.defaultPhotoURL);
       }
       const payload = this.prepareCustomerInfoToSend();
-      const customer = await this._userSvc.insertNewCustomer(payload);
+      const customer = await this._userSvc.createAffiliate(payload);
       const customerObject = customer.data();
       if(customerObject){
         customerObject['customerID'] = customer.id;
