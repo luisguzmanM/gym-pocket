@@ -3,7 +3,7 @@ type SignUp = {
   password: string;
 }
 
-type SignIn = {
+type LogIn = {
   email: string;
   password: string;
 }

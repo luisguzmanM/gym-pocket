@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-signup',
@@ -17,19 +19,27 @@ export class SignupComponent  implements OnInit {
   });
 
   constructor(
-    private _routerSvc: Router
+    private _routerSvc: Router,
+    private _toastSvc: ToastService,
+    private _authSvc: AuthService
   ) { }
 
   ngOnInit() {}
 
   async onSubmit() {
-    const payload: any = {
-      email: this.signupForm.controls['email'].value,
-      password: this.signupForm.controls['password'].value
-    }
+    const email = this.signupForm.controls['email'].value;
+    const password = this.signupForm.controls['password'].value;
 
     if(this.signupForm.invalid) return;
-    this._routerSvc.navigate(['/main'])
+
+    try {
+      const res = await this._authSvc.signUp(email, password);
+      this._routerSvc.navigate(['/main']);
+      this._toastSvc.show('Bienvenido 😊');
+    } catch (error) {
+      this._toastSvc.show('Error al registrar cuenta ❌');
+    }
+
   }
 
   goToLoginView(){

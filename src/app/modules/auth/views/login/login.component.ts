@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 
 @Component({
@@ -18,19 +20,28 @@ export class LoginComponent  implements OnInit {
   });
 
   constructor(
-    private _routerSvc: Router
+    private _routerSvc: Router,
+    private _toastSvc: ToastService,
+    private _authSvc: AuthService,
   ) { }
 
   ngOnInit() {}
 
   async onSubmit() {
-    const payload: any = {
-      email: this.loginFormCtrl.controls['email'].value,
-      password: this.loginFormCtrl.controls['password'].value
-    }
+    const email = this.loginFormCtrl.controls['email'].value;
+    const password = this.loginFormCtrl.controls['password'].value;
 
     if(this.loginFormCtrl.invalid) return;
-    this._routerSvc.navigate(['/main'])
+
+    try {
+      const res = await this._authSvc.login(email, password);
+      console.log('Inicio de sesión exitoso', res);
+      this._routerSvc.navigate(['/main'])
+      this._toastSvc.show('Bienvenido 😊');
+    } catch (error) {
+      this._toastSvc.show('Error al iniciar sesión ❌');
+    }
+
   }
 
   goToLoginView(){
