@@ -8,7 +8,7 @@ export class AuthService {
 
   constructor(
     private afAuth: AngularFireAuth
-  ) {}
+  ) { }
 
   // Registro de nuevo usuario
   signUp(email: string, password: string) {
@@ -28,6 +28,16 @@ export class AuthService {
   // Obtener usuario actual
   getUser() {
     return this.afAuth.authState;
+  }
+
+  // Configurar la persistencia de la autenticación
+  async setPersistence() {
+    try {
+      await this.afAuth.setPersistence('local');
+      console.log('Persistencia configurada a local');
+    } catch (error) {
+      console.error('Error configurando la persistencia:', error);
+    }
   }
 
 }
