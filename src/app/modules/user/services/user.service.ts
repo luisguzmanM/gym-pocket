@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { initializeApp } from 'firebase/app';
-import { Firestore, addDoc, collection, getDoc, getDocs, getFirestore, query } from 'firebase/firestore';
+import { Firestore, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query } from 'firebase/firestore';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
@@ -53,4 +53,18 @@ export class UserService {
       throw new Error('Usuario no autenticado');
     }
   }
+
+  // Eliminar un cliente del gimnasio del usuario actual
+  async deleteAffiliate(customerID: string): Promise<void> {
+    const user = await this.afAuth.currentUser;
+
+    if (user) {
+      const gymID = user.uid;
+      const affiliateDocRef = doc(this.db, `gym/${gymID}/affiliate/${customerID}`);
+      await deleteDoc(affiliateDocRef);
+    } else {
+      throw new Error('Usuario no autenticado');
+    }
+  }
+  
 }

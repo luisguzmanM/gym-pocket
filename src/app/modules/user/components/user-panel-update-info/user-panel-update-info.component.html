@@ -1,0 +1,71 @@
+@if(loading){
+  <ion-spinner></ion-spinner>
+}
+
+@if(!loading){
+  <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
+    <div class="p-relative">
+      <ion-avatar>
+        <img [src]="formCtrl.controls['photoURL'].value"/>
+      </ion-avatar>
+      <ion-fab vertical="bottom" horizontal="end" class="fab-button">
+        <ion-fab-button (click)="changeUserPhoto()" size="small">
+          <ion-icon name="camera-outline"></ion-icon>
+        </ion-fab-button>
+      </ion-fab>
+    </div>
+  </div>
+  
+  <form class="ion-padding" [formGroup]="formCtrl">
+
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-justify-content-between gap-10">
+        <ion-col class="ion-no-padding">
+          <ion-input type="text" label="Nombres" label-placement="floating" fill="outline" formControlName="firstName"></ion-input>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-input type="text" label="Apellidos" label-placement="floating" fill="outline" formControlName="lastName"></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <br>
+
+    <ion-input type="date" label="Fec. Nacimiento" label-placement="floating" fill="outline" formControlName="dateOfBirth"></ion-input>
+    <br>
+
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-justify-content-between gap-10">
+        <ion-col class="ion-no-padding" size="4">
+          <ion-select interface="popover" label="Tipo doc." label-placement="floating" fill="outline" formControlName="typeDocIdentity">
+            <ion-select-option value="DNI">DNI</ion-select-option>
+            <ion-select-option value="CI">CI</ion-select-option>
+            <ion-select-option value="CE">CE</ion-select-option>
+            <ion-select-option value="PASS" >PASS</ion-select-option>
+            <ion-select-option value="OTHER">OTRO</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-input type="text" label="Número de documento" label-placement="floating" fill="outline" formControlName="docNumber"></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <br>
+
+    <ion-grid class="ion-no-padding">
+      <ion-row class="ion-justify-content-between gap-10">
+        <ion-col class="ion-no-padding" size="4">
+          <ion-select interface="popover" label="País" label-placement="floating" fill="outline" formControlName="countryCode">
+            <ion-select-option value="51">+51</ion-select-option>
+            <ion-select-option value="58">+58</ion-select-option>
+          </ion-select>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    <br>
+    
+    <ion-input type="date" label="Fec. Inicio" label-placement="floating" fill="outline"  formControlName="startDate"></ion-input>
+  </form>
+}

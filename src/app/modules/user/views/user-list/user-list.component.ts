@@ -13,6 +13,7 @@ import { Platform } from '@ionic/angular';
 import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
+import { UserDetailComponent } from '../user-detail/user-detail.component';
 
 @Component({
   selector: 'app-user-list',
@@ -103,8 +104,17 @@ export class UserListComponent  implements OnInit {
     this.isConnected = navigator.onLine;
   }
 
-  openAffiliateDetail(info:User):void {
+  async openAffiliateDetail(info:User) {
     console.log(info);
+
+    const modal = await this._modalCtrl.create({
+      component: UserDetailComponent,
+      componentProps: {
+        data: info
+      }
+    });
+    
+    modal.present();
   }
 
 }

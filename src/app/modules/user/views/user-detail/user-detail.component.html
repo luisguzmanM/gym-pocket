@@ -1,3 +1,52 @@
-<p>
-  user-detail works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button fill="clear" (click)="!update ? closeUserDetail() : update = false">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+    <ion-title>{{ title }}</ion-title>
+
+    @if(!update){
+      <ion-buttons slot="end">
+        <ion-button fill="clear" (click)="showMoreOptions()">
+          <ion-icon name="options-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    }
+
+    @if(update){
+      <ion-button 
+        fill="clear" 
+        slot="end" 
+        [disabled]="!enableSaveButton"
+        (click)="updateUserDetails()"
+      >
+        Guardar
+      </ion-button>
+    }
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  @if(loading){
+    <div class="d-flex ion-align-items-center ion-justify-content-center full-width full-height">
+      <ion-spinner></ion-spinner>
+    </div>
+  }
+
+  @if (!update && !loading) {
+    <app-user-panel-info [data]="data"></app-user-panel-info>
+  }
+  
+  @if(update && !loading){
+    <app-user-panel-update-info
+      [data]="data" 
+      (formChanged)="areThereChangesInUpdateForm($event)"
+      (formValues)="getNewFormValues($event)"
+      [loading]="loading"
+    ></app-user-panel-update-info>
+  }
+
+</ion-content>

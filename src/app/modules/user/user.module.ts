@@ -6,7 +6,10 @@ import { UserListComponent } from './views/user-list/user-list.component';
 import { UserItemComponent } from './components/user-item/user-item.component';
 import { IonicModule } from '@ionic/angular';
 import { UserRegistrationModalComponent } from './components/user-registration-modal/user-registration-modal.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { UserDetailComponent } from './views/user-detail/user-detail.component';
+import { UserPanelInfoComponent } from './components/user-panel-info/user-panel-info.component';
+import { UserPanelUpdateInfoComponent } from './components/user-panel-update-info/user-panel-update-info.component';
 
 
 
@@ -14,14 +17,18 @@ import { ReactiveFormsModule } from '@angular/forms';
   declarations: [
     UserListComponent,
     UserItemComponent,
-    UserRegistrationModalComponent
+    UserRegistrationModalComponent,
+    UserDetailComponent,
+    UserPanelInfoComponent,
+    UserPanelUpdateInfoComponent
   ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
     IonicModule,
     UserRoutingModule,
-    HeaderComponent
+    HeaderComponent,
+    FormsModule
   ]
 })
 export class UserModule { }
