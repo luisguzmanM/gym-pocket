@@ -103,4 +103,8 @@ export class UserListComponent  implements OnInit {
     this.isConnected = navigator.onLine;
   }
 
+  openAffiliateDetail(info:User):void {
+    console.log(info);
+  }
+
 }

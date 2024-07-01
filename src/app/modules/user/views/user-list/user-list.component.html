@@ -19,6 +19,7 @@
         <app-user-item 
           [user]="user"
           [ngClass]="{'parpadeo': isLastAddedUser(user.customerID)}"
+          (click)="openAffiliateDetail(user)"
         ></app-user-item>
       }
     </ion-list>
