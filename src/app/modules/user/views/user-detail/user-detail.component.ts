@@ -4,6 +4,11 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActionSheetController, ModalController, Platform } from '@ionic/angular';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { UserService } from '../../services/user.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
+import { AppState } from 'src/app/state/app.state';
+import { removeUser } from 'src/app/state/actions/user.actions';
 
 @Component({
   selector: 'app-user-detail',
@@ -36,7 +41,8 @@ export class UserDetailComponent  implements OnInit {
     private _actionSheetCtrl: ActionSheetController,
     private _alertSvc: AlertService,
     private _platform: Platform,
-    private _userSvc: UserService
+    private _userSvc: UserService,
+    private _store: Store<AppState>,
   ) { }
 
   ngOnInit() { }
@@ -85,6 +91,7 @@ export class UserDetailComponent  implements OnInit {
         const {customerID} = this.data;
         try {
           await this._userSvc.deleteAffiliate(customerID);
+          this._store.dispatch(removeUser({userId: customerID}))
           this.closeUserDetail();
           this.loading = false;
         } catch (error) {

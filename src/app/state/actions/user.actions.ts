@@ -17,6 +17,11 @@ export const updateMembershipState = createAction(
 );
 
 export const addUser = createAction(
-  '[User] Add User',
+  '[User List] Add User',
   props<{ user: User }>()
+);
+
+export const removeUser = createAction(
+  '[User List] Remove User',
+  props<{ userId: string }>()
 );
