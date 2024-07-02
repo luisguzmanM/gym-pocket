@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
 import { UserService } from '../../services/user.service';
-import { addUser, loadUserList, loadUserListSuccess } from 'src/app/state/actions/user.actions';
+import { addUser, loadUserList, loadUserListSuccess, removeUser } from 'src/app/state/actions/user.actions';
 import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
 import { ModalController } from '@ionic/angular';
@@ -83,7 +83,7 @@ export class UserListComponent  implements OnInit {
     })
   }
 
-  isLastAddedUser(userId: string): boolean {
+  addFlicker(userId: string): boolean {
     return this.lastAddedUserID === userId;
   }
 
@@ -114,6 +114,15 @@ export class UserListComponent  implements OnInit {
     });
     
     modal.present();
+
+    modal.onDidDismiss().then(customer => {
+      if(!customer.data) return;
+      this.lastAddedUserID = customer.data;
+      setTimeout(() => {
+        this.lastAddedUserID = null;
+        this._store.dispatch(removeUser({ userId: customer.data }));
+      }, 3000)
+    })
   }
 
 }

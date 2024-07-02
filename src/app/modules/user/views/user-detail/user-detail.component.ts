@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from '../../models/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActionSheetController, ModalController, Platform } from '@ionic/angular';
@@ -91,8 +91,7 @@ export class UserDetailComponent  implements OnInit {
         const {customerID} = this.data;
         try {
           await this._userSvc.deleteAffiliate(customerID);
-          this._store.dispatch(removeUser({userId: customerID}))
-          this.closeUserDetail();
+          this._modalCtrl.dismiss(customerID);
           this.loading = false;
         } catch (error) {
           console.error('Error al eliminar el usuario:', error);
