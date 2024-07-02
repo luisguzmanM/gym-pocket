@@ -15,19 +15,18 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
   @Output() formChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() formValues: EventEmitter<any> = new EventEmitter<any>();
   @Input() loading : boolean = false;
-  @Input() loadingText : string = '';
 
   formCtrl: FormGroup = new FormGroup({
+    customerID: new FormControl(''),
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     dateOfBirth: new FormControl('', [Validators.required]),
     typeDocIdentity: new FormControl('', Validators.required),
     docNumber: new FormControl('', Validators.required),
-    phoneNumber: new FormControl('', Validators.required),
     startDate: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
+    phoneNumber: new FormControl('', Validators.required),
     photoURL: new FormControl('', [Validators.required]),
-    customerID: new FormControl('', Validators.required)  
   });
 
   constructor(
@@ -51,8 +50,9 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     this.formCtrl.controls['startDate'].setValue(this.data.startDate);
     this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
 
-    if('id' in this.data){
-      this.formCtrl.controls['id'].setValue(this.data.id);
+    if('customerID' in this.data){
+      this.formCtrl.controls['customerID'].setValue(this.data.customerID);
+      console.log(this.data)
     }
   }
 

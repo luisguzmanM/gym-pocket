@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { User } from '../models/user.model';
 import { initializeApp } from 'firebase/app';
-import { Firestore, addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query } from 'firebase/firestore';
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc } from 'firebase/firestore';
 import { environment } from 'src/environments/environment';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 
@@ -10,16 +10,14 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 })
 export class UserService {
 
-  public firestoreInstance: Firestore;
   private app = initializeApp(environment.firebaseConfig);
   private db = getFirestore(this.app);
   users : User[] = [];
 
-  constructor(private afAuth: AngularFireAuth) {
-    this.firestoreInstance = getFirestore();
-  }
+  constructor(
+    private afAuth: AngularFireAuth
+  ) { }
 
-  // Obtener la lista de clientes del gimnasio del usuario actual
   async getAffiliateList(): Promise<User[]> {
     const user = await this.afAuth.currentUser;
     
@@ -42,7 +40,6 @@ export class UserService {
     }
   }
 
-  // Insertar un nuevo cliente en el gimnasio del usuario actual
   async createAffiliate(user: User) {
     const currentUser = await this.afAuth.currentUser;
     if (currentUser) {
@@ -54,7 +51,6 @@ export class UserService {
     }
   }
 
-  // Eliminar un cliente del gimnasio del usuario actual
   async deleteAffiliate(customerID: string): Promise<void> {
     const user = await this.afAuth.currentUser;
 
@@ -62,6 +58,19 @@ export class UserService {
       const gymID = user.uid;
       const affiliateDocRef = doc(this.db, `gym/${gymID}/affiliate/${customerID}`);
       await deleteDoc(affiliateDocRef);
+    } else {
+      throw new Error('Usuario no autenticado');
+    }
+  }
+
+  async updateAffiliate(affiliateData: User) {
+    const { customerID } = affiliateData;
+    const user = await this.afAuth.currentUser;
+
+    if (user) {
+      const gymID = user.uid;
+      const affiliateDocRef = doc(this.db, `gym/${gymID}/affiliate/${customerID}`);
+      await updateDoc(affiliateDocRef, affiliateData);
     } else {
       throw new Error('Usuario no autenticado');
     }

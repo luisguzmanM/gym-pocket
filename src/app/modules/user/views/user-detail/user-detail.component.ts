@@ -36,10 +36,10 @@ export class UserDetailComponent  implements OnInit {
     private _actionSheetCtrl: ActionSheetController,
     private _alertSvc: AlertService,
     private _platform: Platform,
-    private _userSvc: UserService  
+    private _userSvc: UserService
   ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   closeUserDetail(): void {
     this._modalCtrl.dismiss();
@@ -81,10 +81,10 @@ export class UserDetailComponent  implements OnInit {
 
     if (response === 'confirm') {
       this.loading = true;
-      if('id' in this.data){
-        const {id} = this.data;
+      if('customerID' in this.data){
+        const {customerID} = this.data;
         try {
-          // await this._userSvc.deleteAffiliate(id);
+          await this._userSvc.deleteAffiliate(customerID);
           this.closeUserDetail();
           this.loading = false;
         } catch (error) {
@@ -125,15 +125,15 @@ export class UserDetailComponent  implements OnInit {
     event ? this.enableSaveButton = true : this.enableSaveButton = false;
   }
 
-  getNewFormValues(event: any):void {
-    this.formCtrl.addControl('id', new FormControl(event.id));
+  getNewFormValues(event: User):void {
+    this.formCtrl.addControl('customerID', new FormControl(event.customerID));
     this.formCtrl.setValue(event);
   }
 
   async updateUserDetails(): Promise<void> {
     this.loading = true;
     try {
-      // await this._userSvc.updateUser(this.formCtrl.value);
+      await this._userSvc.updateAffiliate(this.formCtrl.value);
       this.loading = false;
       this.enableSaveButton = false;
       this.closeUserDetail();

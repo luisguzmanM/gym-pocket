@@ -105,7 +105,6 @@ export class UserListComponent  implements OnInit {
   }
 
   async openAffiliateDetail(info:User) {
-    console.log(info);
 
     const modal = await this._modalCtrl.create({
       component: UserDetailComponent,
