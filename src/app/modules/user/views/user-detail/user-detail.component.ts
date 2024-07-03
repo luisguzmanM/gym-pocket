@@ -102,7 +102,7 @@ export class UserDetailComponent  implements OnInit {
   }
 
   notifyToUser(): void {
-    const phone = this.data.phoneNumber.toString()
+    const phone = `${this.data.countryCode}${this.data.phoneNumber}`;
     this.openChatWithNumber(phone);
   }
 
