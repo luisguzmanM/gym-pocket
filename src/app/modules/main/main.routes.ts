@@ -1,7 +1,6 @@
 import { RouterModule, Routes } from "@angular/router";
 import { MainComponent } from "./views/main/main.component";
 import { UserModule } from "../user/user.module";
-import { AccountModule } from "../account/account.module";
 import { SettingModule } from "../setting/setting.module";
 
 const MAIN_ROUTES : Routes = [
@@ -16,10 +15,6 @@ const MAIN_ROUTES : Routes = [
       {
         path: 'user-list',
         loadChildren: () => import('../user/user.module').then(m => UserModule)
-      },
-      {
-        path: 'account',
-        loadChildren: () => import('../account/account.module').then(m => AccountModule)
       },
       {
         path: 'setting',
