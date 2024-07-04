@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
-import { Observable, finalize } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'

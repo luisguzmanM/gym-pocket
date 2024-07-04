@@ -11,8 +11,8 @@ export const loadUserListSuccess = createAction(
   props<{ users: User[] }>()
 );
 
-export const updateMembershipState = createAction(
-  '[User List] Update Membership State',
+export const updateAffiliateData = createAction(
+  '[User List] Update affiliate data',
   props<{ user: User }>()
 );
 

@@ -8,7 +8,8 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
 import { AppState } from 'src/app/state/app.state';
-import { removeUser } from 'src/app/state/actions/user.actions';
+import { removeUser, updateAffiliateData } from 'src/app/state/actions/user.actions';
+import { CameraService } from 'src/app/shared/services/camera.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -23,6 +24,7 @@ export class UserDetailComponent  implements OnInit {
   loading: boolean = false;
   loadingText: string = '';
   enableSaveButton: boolean = false;
+  customerPhotoDataUpdate: any = {};
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -43,6 +45,7 @@ export class UserDetailComponent  implements OnInit {
     private _platform: Platform,
     private _userSvc: UserService,
     private _store: Store<AppState>,
+    private _cameraSvc: CameraService
   ) { }
 
   ngOnInit() { }
@@ -107,12 +110,8 @@ export class UserDetailComponent  implements OnInit {
   }
 
   openChatWithNumber(phoneNumber: string) {
-    const message: string = 'Estimado usuario, gimnasio Ramyen le notifica que su mensualidad ha vencido.';
-    if (this._platform.is('android') || this._platform.is('ios')) {
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_system');
-    } else {
-      window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_system');
-    }
+    const message: string = 'Estimado usuario, tu gimnasio te notifica que tu mensualidad ha vencido. Por favor acércate al counter de nuestra sede para regularizar tu mensualidad.';
+    window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_system');
   }
 
   setInitialUserData() {
@@ -139,7 +138,15 @@ export class UserDetailComponent  implements OnInit {
   async updateUserDetails(): Promise<void> {
     this.loading = true;
     try {
+      this.formCtrl.controls['photoURL'].setValue(this.customerPhotoDataUpdate);
+      const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage(this.formCtrl.controls['photoURL'].value);
+      const photoURL = await photoUploaded.ref.getDownloadURL();
+      this.formCtrl.controls['photoURL'].setValue(photoURL);
       await this._userSvc.updateAffiliate(this.formCtrl.value);
+
+      // Despacha la acción para actualizar el store
+      this._store.dispatch(updateAffiliateData({ user: this.formCtrl.value }));
+    
       this.loading = false;
       this.enableSaveButton = false;
       this.closeUserDetail();
@@ -151,6 +158,11 @@ export class UserDetailComponent  implements OnInit {
 
   showLoading(event:any){
     this.loading = event;
+  }
+
+  setUpdateCustomerPhoto(event: any){
+    this.customerPhotoDataUpdate = event;
+    console.log(this.customerPhotoDataUpdate)
   }
 
 }

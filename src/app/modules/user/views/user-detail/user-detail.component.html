@@ -46,6 +46,7 @@
       (formChanged)="areThereChangesInUpdateForm($event)"
       (formValues)="getNewFormValues($event)"
       [loading]="loading"
+      (customerPhotoEmitter)="setUpdateCustomerPhoto($event)"
     ></app-user-panel-update-info>
   }
 

@@ -1,8 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, output } from '@angular/core';
 import { User } from '../../models/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { UserService } from '../../services/user.service';
-import { ToastService } from 'src/app/shared/services/toast.service';
+import { CameraService } from 'src/app/shared/services/camera.service';
 
 @Component({
   selector: 'app-user-panel-update-info',
@@ -15,6 +14,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
   @Output() formChanged: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() formValues: EventEmitter<any> = new EventEmitter<any>();
   @Input() loading : boolean = false;
+  @Output() customerPhotoEmitter: EventEmitter<string> = new EventEmitter<string>();
 
   formCtrl: FormGroup = new FormGroup({
     customerID: new FormControl(''),
@@ -29,9 +29,11 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     photoURL: new FormControl('', [Validators.required]),
   });
 
+  customerPhoto: any = null;
+  customerPhotoURL: string = '';
+
   constructor(
-    private _userSvc: UserService,
-    private _toastSvc: ToastService
+    private _cameraSvc: CameraService,
   ) {}
 
   ngOnInit() {
@@ -52,7 +54,6 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
 
     if('customerID' in this.data){
       this.formCtrl.controls['customerID'].setValue(this.data.customerID);
-      console.log(this.data)
     }
   }
 
@@ -63,31 +64,14 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     });
   }
 
-  async changeUserPhoto() {
-    // try {
-    //   const result = await this._userSvc.takePicture('Foto del usuario');
-    //   if (result && 'dataUrl' in result) {
-    //     this.loading = true;
-    //     this.loadingText = 'Actualizando foto...';
-
-    //     // Obtener la URL de la imagen anterior
-    //     const oldPhotoUrl = this.formCtrl.controls['photo'].value;
-
-    //     // Eliminar la imagen anterior si existe
-    //     if (oldPhotoUrl) {
-    //       await this._userSvc.deleteImageFromFirebase(oldPhotoUrl);
-    //     }
-
-    //     const photoPath = await this._userSvc.uploadImageToFirebase(result);
-    //     this.formCtrl.controls['photo'].setValue(photoPath);
-
-    //     this.loading = false;
-    //     this.loadingText = '';        
-    //   }
-    // } catch (error) {
-    //   console.error('Error al capturar la foto:', error);
-    //   this._toastSvc.show('Hubo un error al actualizr la foto. Comunícate con el administrador de la app.');
-    // }
+  async takePhotoWithCamera() {
+    try {
+      const customerPhoto = await this._cameraSvc.takePicture();
+      this.customerPhotoEmitter.emit(customerPhoto)
+      this.formCtrl.controls['photoURL'].setValue(customerPhoto.dataUrl);
+    } catch (error) {
+      console.log('Error ', error)
+    }
   }
 
 }
