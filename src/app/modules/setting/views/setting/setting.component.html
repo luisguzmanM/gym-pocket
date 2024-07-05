@@ -1,5 +1,12 @@
 <app-header title="Configuración" [showBackButton]="false"></app-header>
 
+
+@if(loading){
+  <div class="d-flex ion-align-items-center ion-justify-content-center full-width full-height">
+    <ion-spinner></ion-spinner>
+  </div>
+}
+
 <ion-content>
 
   <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
@@ -7,12 +14,6 @@
       <ion-avatar>
         <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
       </ion-avatar>
-    
-      <ion-fab vertical="bottom" horizontal="end" class="fab-button">
-        <ion-fab-button size="small">
-          <ion-icon name="camera-outline"></ion-icon>
-        </ion-fab-button>
-      </ion-fab>
     </div>
   </div>
 
@@ -34,7 +35,7 @@
         <ion-item>
           <ion-label>Logo del gimnasio</ion-label>
           <ion-buttons slot="end">
-            <ion-button color="primary" shape="" fill="clear">
+            <ion-button color="primary" shape="" fill="clear" (click)="selectLogo()">
               <ion-icon slot="icon-only" name="image-outline"></ion-icon>
             </ion-button>
           </ion-buttons>

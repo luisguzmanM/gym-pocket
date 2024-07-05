@@ -19,6 +19,14 @@ export class CameraService {
     });
   };
 
+  async selectPicture():Promise<any> {
+    return await Camera.getPhoto({
+      quality: 100,
+      resultType: CameraResultType.DataUrl,
+      source: CameraSource.Photos
+    })
+  }
+
   async uploadPhotoToCloudStorage(imageData: any) {
     const { dataUrl, format } = imageData;
     const randomNumber = Math.floor(Math.random() * 10000);

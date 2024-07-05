@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,6 @@ export class AuthService {
     private afs: AngularFirestore
   ) { }
 
-  // Registro de nuevo usuario
   async signUp(email: string, password: string) {
     try {
       const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
@@ -20,7 +20,11 @@ export class AuthService {
       if (user) {
         await this.afs.collection('gym').doc(user.uid).set({
           email: user.email,
-          ownerId: user.uid
+          ownerId: user.uid,
+          logoURL: 'https://i.postimg.cc/ZRx80WDt/Dark-Blue-and-Brown-Illustrative-Fitness-Gym-Logo.png',
+          comertialName: 'Iron Gym',
+          notificationMessage: 'Estimado usuario, tu gimnasio te recuerda ponerte al día con tu mensualidad.',
+          theme: 'light'
         });
       }
       return userCredential;
@@ -30,7 +34,6 @@ export class AuthService {
     }
   }
 
-  // Inicio de sesión
   async login(email: string, password: string) {
     try {
       return await this.afAuth.signInWithEmailAndPassword(email, password);
@@ -40,7 +43,6 @@ export class AuthService {
     }
   }
 
-  // Cierre de sesión
   async logout() {
     try {
       await this.afAuth.signOut();
@@ -50,13 +52,15 @@ export class AuthService {
     }
   }
 
-  // Obtener usuario actual
   getUser() {
     return this.afAuth.authState;
   }
 
-  // Configurar la persistencia de la autenticación
-  async setPersistence() {
+  getUserData(uid: string): Observable<any> {
+    return this.afs.collection('gym').doc(uid).valueChanges();
+  }
+
+  async setAuthPersistence() {
     try {
       await this.afAuth.setPersistence('local');
       console.log('Persistencia configurada a local');
