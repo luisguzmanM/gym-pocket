@@ -13,6 +13,7 @@ export class SettingComponent  implements OnInit {
 
   loading: boolean = false;
   userID: any = null;
+  user: any = {}
 
   constructor(
     private _routerSvc: Router,
@@ -52,14 +53,14 @@ export class SettingComponent  implements OnInit {
       this.userID = user?.uid;
       if(this.userID != null){
         this.getUserData();
-        this.loading = false;
       }
     });
   }
 
   getUserData(){
     this._authSvc.getUserData(this.userID).subscribe(data => {
-      console.log(data)  
+      this.user = data;
+      this.loading = false;
     })
   }
 

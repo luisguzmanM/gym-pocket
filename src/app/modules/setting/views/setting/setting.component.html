@@ -7,101 +7,103 @@
   </div>
 }
 
-<ion-content>
+@if(!loading){
+  <ion-content>
 
-  <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
-    <div class="p-relative">
-      <ion-avatar>
-        <img src="https://ionicframework.com/docs/img/demos/avatar.svg" />
-      </ion-avatar>
+    <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
+      <div class="p-relative">
+        <ion-avatar>
+          <img [src]="user.logoURL" />
+        </ion-avatar>
+      </div>
     </div>
-  </div>
-
-  <div class="ion-text-center">
-    <h1>Ramyen</h1>
-    <p>jorgesmithgmail.com</p>
-  </div>
-
-  <!-- Account setting -->
-  <ion-card class="ion-margin-top">
-
-    <ion-card-header>
-      <ion-card-title class="ion-padding-start ion-padding-top">Cuenta</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-
-      <ion-list lines="none">
-        <ion-item>
-          <ion-label>Logo del gimnasio</ion-label>
-          <ion-buttons slot="end">
-            <ion-button color="primary" shape="" fill="clear" (click)="selectLogo()">
-              <ion-icon slot="icon-only" name="image-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Nombre comercial</ion-label>
-          <ion-buttons slot="end">
-            <ion-button color="primary" shape="" fill="clear">
-              <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Contraseña de la cuenta</ion-label>
-          <ion-buttons slot="end">
-            <ion-button color="primary" shape="" fill="clear">
-              <ion-icon slot="icon-only" name="key-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Mensaje de notificación</ion-label>
-          <ion-buttons slot="end">
-            <ion-button color="primary" shape="" fill="clear">
-              <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-
-        <ion-item>
-          <ion-label>Eliminar cuenta</ion-label>
-          <ion-buttons slot="end">
-            <ion-button color="primary" shape="" fill="clear">
-              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ion-list>
-
-    </ion-card-content>
-  </ion-card>
-
-  <!-- UI -->
-  <ion-card class="ion-margin-top">
-
-    <ion-card-header>
-      <ion-card-title class="ion-padding-start ion-padding-top">Apariencia</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-list lines="none">
-        <ion-item>
-          <ion-toggle mode="ios" justify="space-between">Tema Light/Dark</ion-toggle>
-        </ion-item>
-      </ion-list>
-    </ion-card-content>
-  </ion-card>
-
-  <div class="ion-text-center">
-    <ion-button fill="clear" color="danger" block="true" (click)="logOut()">
-      <ion-icon name="log-out-outline" slot="end"></ion-icon>
-      Cerrar sesión
-    </ion-button>
-  </div>
-
-</ion-content>
+  
+    <div class="ion-text-center">
+      <h1>{{ user.comertialName }}</h1>
+      <p>{{ user.email }}</p>
+    </div>
+  
+    <!-- Account setting -->
+    <ion-card class="ion-margin-top">
+  
+      <ion-card-header>
+        <ion-card-title class="ion-padding-start ion-padding-top">Cuenta</ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+  
+        <ion-list lines="none">
+          <ion-item>
+            <ion-label>Logo del gimnasio</ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="primary" shape="" fill="clear" (click)="selectLogo()">
+                <ion-icon slot="icon-only" name="image-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Nombre comercial</ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="primary" shape="" fill="clear">
+                <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Contraseña de la cuenta</ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="primary" shape="" fill="clear">
+                <ion-icon slot="icon-only" name="key-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Mensaje de notificación</ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="primary" shape="" fill="clear">
+                <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+  
+          <ion-item>
+            <ion-label>Eliminar cuenta</ion-label>
+            <ion-buttons slot="end">
+              <ion-button color="primary" shape="" fill="clear">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-list>
+  
+      </ion-card-content>
+    </ion-card>
+  
+    <!-- UI -->
+    <ion-card class="ion-margin-top">
+  
+      <ion-card-header>
+        <ion-card-title class="ion-padding-start ion-padding-top">Apariencia</ion-card-title>
+      </ion-card-header>
+  
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item>
+            <ion-toggle mode="ios" justify="space-between">Tema Light/Dark</ion-toggle>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+  
+    <div class="ion-text-center">
+      <ion-button fill="clear" color="danger" block="true" (click)="logOut()">
+        <ion-icon name="log-out-outline" slot="end"></ion-icon>
+        Cerrar sesión
+      </ion-button>
+    </div>
+  
+  </ion-content>
+}
