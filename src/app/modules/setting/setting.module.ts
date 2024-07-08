@@ -4,6 +4,7 @@ import { SettingRoutingModule } from './setting.routes';
 import { IonicModule } from '@ionic/angular';
 import { SettingComponent } from './views/setting/setting.component';
 import { HeaderComponent } from 'src/app/shared/components/header/header.component';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -15,6 +16,7 @@ import { HeaderComponent } from 'src/app/shared/components/header/header.compone
     CommonModule,
     IonicModule,
     SettingRoutingModule,
+    FormsModule,
     HeaderComponent
   ]
 })

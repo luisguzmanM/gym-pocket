@@ -92,7 +92,7 @@
       <ion-card-content>
         <ion-list lines="none">
           <ion-item>
-            <ion-toggle mode="ios" justify="space-between">Tema Light/Dark</ion-toggle>
+            <ion-toggle mode="ios" justify="space-between" (ionChange)="setTheme(!darkModeValue)" [checked]="darkModeValue">Tema Oscuro</ion-toggle>
           </ion-item>
         </ion-list>
       </ion-card-content>

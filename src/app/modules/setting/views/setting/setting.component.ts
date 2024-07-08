@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { CameraService } from 'src/app/shared/services/camera.service';
+import { ThemeService } from 'src/app/shared/services/theme.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
@@ -13,16 +15,21 @@ export class SettingComponent  implements OnInit {
 
   loading: boolean = false;
   userID: any = null;
-  user: any = {}
+  user: any = {};
+  darkMode!: BehaviorSubject<boolean>;
+  darkModeValue: boolean = false;
 
   constructor(
     private _routerSvc: Router,
     private _toastSvc: ToastService,
     private _authSvc: AuthService,
-    private _cameraSvc: CameraService
+    private _cameraSvc: CameraService,
+    private _themeSvc: ThemeService
   ) { }
 
   ngOnInit() {
+    this.darkMode = this._themeSvc.darkMode;
+    this.darkMode.subscribe(mode => this.darkModeValue = mode);
     this.getUser();
   }
 
@@ -62,6 +69,10 @@ export class SettingComponent  implements OnInit {
       this.user = data;
       this.loading = false;
     })
+  }
+
+  setTheme(darkMode: boolean){
+    this._themeSvc.setTheme(darkMode);
   }
 
 }
