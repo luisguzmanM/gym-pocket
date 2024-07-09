@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { ModalController } from '@ionic/angular';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AlertService } from 'src/app/shared/services/alert.service';
@@ -20,6 +20,8 @@ export class SettingComponent  implements OnInit {
   user: any = {};
   darkMode!: BehaviorSubject<boolean>;
   darkModeValue: boolean = false;
+  settingNotificationMessage: boolean = false;
+  notificationMessage: FormControl = new FormControl('', [Validators.maxLength(200)]);
 
   constructor(
     private _routerSvc: Router,
@@ -28,7 +30,6 @@ export class SettingComponent  implements OnInit {
     private _cameraSvc: CameraService,
     private _themeSvc: ThemeService,
     private _alertSvc: AlertService,
-    private _modalCtrl: ModalController,
   ) { }
 
   ngOnInit() {
@@ -80,10 +81,10 @@ export class SettingComponent  implements OnInit {
   }
 
   async deleteAccount() {
-    this.loading = true;
-
     const response = await this._alertSvc.show('Advertencia', '', 'Si confirmas esta acción, se borrará toda la información de tus clientes. Esta acción no se podrá revertir. ¿Seguro que deseas eliminar la cuenta?')
     if (response !== 'confirm') return;
+    
+    this.loading = true;
 
     try {
       await this._authSvc.deleteCollection(this.userID);
@@ -94,6 +95,10 @@ export class SettingComponent  implements OnInit {
       this.loading = false;
       this._toastSvc.show(error as string)
     }
+  }
+
+  setNotificationMessage() {
+    console.log(this.notificationMessage.value)
   }
 
 }

@@ -63,16 +63,40 @@
           <ion-item>
             <ion-label>Mensaje de notificación</ion-label>
             <ion-buttons slot="end">
-              <ion-button color="primary" shape="" fill="clear">
+              <ion-button color="primary" shape="" fill="clear" (click)="settingNotificationMessage = true" [disabled]="settingNotificationMessage">
                 <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
               </ion-button>
             </ion-buttons>
           </ion-item>
+
+          @if(settingNotificationMessage){
+            <ion-item>
+              <ion-textarea
+                labelPlacement="floating" 
+                fill="outline" 
+                rows="5" 
+                [formControl]="notificationMessage"
+                [counter]="true"
+                maxlength="200"
+                [(ngModel)]="user.notificationMessage"
+              ></ion-textarea>
+            </ion-item>
+  
+            <ion-item>
+              <ion-note color="medium" class="ion-margin-horizontal">
+                Este es el mensaje que se mostrará cuando notifiques a un cliente.
+              </ion-note>
+            </ion-item>
+  
+            <ion-button expand="block" (click)="setNotificationMessage()" [disabled]="notificationMessage.invalid">
+              Guardar mensaje
+            </ion-button>
+          }
   
           <ion-item>
-            <ion-label>Eliminar cuenta</ion-label>
+            <ion-label color="danger">Eliminar cuenta</ion-label>
             <ion-buttons slot="end">
-              <ion-button color="primary" shape="" fill="clear" (click)="deleteAccount()">
+              <ion-button color="danger" shape="" fill="clear" (click)="deleteAccount()">
                 <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
@@ -99,7 +123,7 @@
     </ion-card>
   
     <div class="ion-text-center">
-      <ion-button fill="clear" color="danger" block="true" (click)="logOut()">
+      <ion-button fill="clear" color="primary" block="true" (click)="logOut()">
         <ion-icon name="log-out-outline" slot="end"></ion-icon>
         Cerrar sesión
       </ion-button>
