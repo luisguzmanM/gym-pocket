@@ -1,14 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActionSheetController, ModalController, Platform } from '@ionic/angular';
+import { ActionSheetController, ModalController } from '@ionic/angular';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { UserService } from '../../services/user.service';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
 import { AppState } from 'src/app/state/app.state';
-import { removeUser, updateAffiliateData } from 'src/app/state/actions/user.actions';
+import { updateAffiliateData } from 'src/app/state/actions/user.actions';
 import { CameraService } from 'src/app/shared/services/camera.service';
 
 @Component({
@@ -42,7 +40,6 @@ export class UserDetailComponent  implements OnInit {
     private _modalCtrl: ModalController,
     private _actionSheetCtrl: ActionSheetController,
     private _alertSvc: AlertService,
-    private _platform: Platform,
     private _userSvc: UserService,
     private _store: Store<AppState>,
     private _cameraSvc: CameraService

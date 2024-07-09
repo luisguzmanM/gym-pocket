@@ -24,7 +24,6 @@ export class ThemeService {
 
   setInitialTheme(){
     let darkMode = JSON.parse(localStorage.getItem('darkMode') || 'false');
-    console.log('initial service theme ', darkMode)
 
     if(darkMode){
       document.body.setAttribute('color-theme', 'dark');

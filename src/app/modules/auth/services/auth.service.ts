@@ -69,4 +69,21 @@ export class AuthService {
     }
   }
 
+  async deleteCollection(uid:string){
+    try {
+      await this.afs.collection('gym').doc(uid).delete();
+    } catch (error) {
+      throw new Error ('Error al borrar la colección del gimnasio');
+    }
+  }
+
+  async deleteUser(){
+    try {
+      const currentUser = await this.afAuth.currentUser;
+      await currentUser?.delete();
+    } catch (error) {
+      throw new Error ('Error al borrar al usuario');
+    }
+  }
+
 }
