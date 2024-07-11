@@ -22,6 +22,7 @@ export class SettingComponent  implements OnInit {
   darkModeValue: boolean = false;
   settingNotificationMessage: boolean = false;
   notificationMessage: FormControl = new FormControl('', [Validators.maxLength(200)]);
+  currentNotificationMessage: string = '';
 
   constructor(
     private _routerSvc: Router,
@@ -72,6 +73,7 @@ export class SettingComponent  implements OnInit {
   getUserData(){
     this._authSvc.getUserData(this.userID).subscribe(data => {
       this.user = data;
+      this.currentNotificationMessage = this.user.notificationMessage;
       this.loading = false;
     })
   }
