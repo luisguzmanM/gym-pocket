@@ -1,12 +1,19 @@
 import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { initializeApp } from 'firebase/app';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment';
+
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
+
+  private app = initializeApp(environment.firebaseConfig);
+  private db = getFirestore(this.app);
 
   constructor(
     private afAuth: AngularFireAuth,
@@ -83,6 +90,17 @@ export class AuthService {
       await currentUser?.delete();
     } catch (error) {
       throw new Error ('Error al borrar al usuario');
+    }
+  }
+
+  async updateUser(gym:any) {
+    if(gym){
+      const gymID = gym.ownerId;
+      const affiliateDocRef = doc(this.db, `gym/${gymID}`);
+      const response = await updateDoc(affiliateDocRef, gym);
+      return response;
+    } else {
+      throw new Error ('Error al actualizar usuario');
     }
   }
 

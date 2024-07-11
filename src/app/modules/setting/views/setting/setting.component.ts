@@ -97,8 +97,17 @@ export class SettingComponent  implements OnInit {
     }
   }
 
-  setNotificationMessage() {
-    console.log(this.notificationMessage.value)
+  async setNotificationMessage() {
+    this.loading = true;
+    try {
+      const response = await this._authSvc.updateUser(this.user);
+      console.log(response)
+      this.loading = false;
+      this.settingNotificationMessage = false;
+      this._toastSvc.show('Actualización exitosa ✅');
+    } catch (error) {
+      this._toastSvc.show('Error al actualizar');
+    }
   }
 
 }
