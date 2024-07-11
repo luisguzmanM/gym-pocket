@@ -100,8 +100,7 @@ export class SettingComponent  implements OnInit {
   async setNotificationMessage() {
     this.loading = true;
     try {
-      const response = await this._authSvc.updateUser(this.user);
-      console.log(response)
+      await this._authSvc.updateUser(this.user);
       this.loading = false;
       this.settingNotificationMessage = false;
       this._toastSvc.show('Actualización exitosa ✅');

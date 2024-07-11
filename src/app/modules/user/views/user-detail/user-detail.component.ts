@@ -8,6 +8,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { updateAffiliateData } from 'src/app/state/actions/user.actions';
 import { CameraService } from 'src/app/shared/services/camera.service';
+import { AuthService } from 'src/app/modules/auth/services/auth.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -23,6 +24,10 @@ export class UserDetailComponent  implements OnInit {
   loadingText: string = '';
   enableSaveButton: boolean = false;
   customerPhotoDataUpdate: any = {};
+
+  // Gym
+  userID: any = null;
+  user: any = {};
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -42,10 +47,13 @@ export class UserDetailComponent  implements OnInit {
     private _alertSvc: AlertService,
     private _userSvc: UserService,
     private _store: Store<AppState>,
-    private _cameraSvc: CameraService
+    private _cameraSvc: CameraService,
+    private _authSvc: AuthService
   ) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.getUser();
+  }
 
   closeUserDetail(): void {
     this._modalCtrl.dismiss();
@@ -107,7 +115,9 @@ export class UserDetailComponent  implements OnInit {
   }
 
   openChatWithNumber(phoneNumber: string) {
-    const message: string = 'Estimado usuario, tu gimnasio te notifica que tu mensualidad ha vencido. Por favor acércate al counter de nuestra sede para regularizar tu mensualidad.';
+    const { notificationMessage } = this.user;
+    const message: string = notificationMessage;
+    console.log(message)
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_system');
   }
 
@@ -160,6 +170,23 @@ export class UserDetailComponent  implements OnInit {
   setUpdateCustomerPhoto(event: any){
     this.customerPhotoDataUpdate = event;
     console.log(this.customerPhotoDataUpdate)
+  }
+
+  getUser(): void {
+    this.loading = true;
+    this._authSvc.getUser().subscribe(user => {
+      this.userID = user?.uid;
+      if(this.userID != null){
+        this.getUserData();
+      }
+    });
+  }
+
+  getUserData(){
+    this._authSvc.getUserData(this.userID).subscribe(data => {
+      this.user = data;
+      this.loading = false;
+    })
   }
 
 }
