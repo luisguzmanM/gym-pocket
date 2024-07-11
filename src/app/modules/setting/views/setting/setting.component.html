@@ -63,7 +63,7 @@
           <ion-item>
             <ion-label>Mensaje de notificación</ion-label>
             <ion-buttons slot="end">
-              <ion-button color="primary" shape="" fill="clear" (click)="settingNotificationMessage = true" [disabled]="settingNotificationMessage">
+              <ion-button color="primary" shape="" fill="clear" (click)="settingNotificationMessage = !settingNotificationMessage">
                 <ion-icon slot="icon-only" name="logo-whatsapp"></ion-icon>
               </ion-button>
             </ion-buttons>
@@ -84,7 +84,7 @@
   
             <ion-item>
               <ion-note color="medium" class="ion-margin-horizontal">
-                Este es el mensaje que se mostrará cuando notifiques a un cliente.
+                Este es el mensaje que se mostrará cuando notifiques a un cliente
               </ion-note>
             </ion-item>
   
