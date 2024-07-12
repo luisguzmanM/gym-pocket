@@ -4,8 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { initializeApp } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, getFirestore, query, updateDoc } from 'firebase/firestore';
+import { doc, getFirestore, updateDoc } from 'firebase/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -20,20 +19,23 @@ export class AuthService {
     private afs: AngularFirestore
   ) { }
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, businessName: string) {
     try {
       const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
       const user = userCredential.user;
+
       if (user) {
         await this.afs.collection('gym').doc(user.uid).set({
-          email: user.email,
+          email: user.email,          
           ownerId: user.uid,
-          logoURL: 'https://i.postimg.cc/ZRx80WDt/Dark-Blue-and-Brown-Illustrative-Fitness-Gym-Logo.png',
-          comertialName: 'Iron Gym',
+          logoURL: 'https://ionicframework.com/docs/img/demos/avatar.svg',
+          businessName: businessName,
+          password: password,
           notificationMessage: 'Estimado usuario, tu gimnasio te recuerda ponerte al día con tu mensualidad.',
           theme: 'light'
         });
       }
+
       return userCredential;
     } catch (error: unknown) {
       const errorMessage = (error as Error).message;
@@ -70,7 +72,6 @@ export class AuthService {
   async setAuthPersistence() {
     try {
       await this.afAuth.setPersistence('local');
-      console.log('Persistencia configurada a local');
     } catch (error) {
       console.error('Error configurando la persistencia:', error);
     }
@@ -95,10 +96,8 @@ export class AuthService {
 
   async updateUser(gym:any) {
     if(gym){
-      const gymID = gym.ownerId;
-      const affiliateDocRef = doc(this.db, `gym/${gymID}`);
-      const response = await updateDoc(affiliateDocRef, gym);
-      return response;
+      const affiliateDocRef = doc(this.db, `gym/${gym.ownerId}`);
+      return await updateDoc(affiliateDocRef, gym);
     } else {
       throw new Error ('Error al actualizar usuario');
     }

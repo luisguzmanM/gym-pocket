@@ -15,7 +15,8 @@ export class SignupComponent  implements OnInit {
   
   signupForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(16)])
+    password: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]),
+    businessName: new FormControl('', [Validators.required])
   });
 
   constructor(
@@ -29,13 +30,14 @@ export class SignupComponent  implements OnInit {
   async onSubmit() {
     const email = this.signupForm.controls['email'].value;
     const password = this.signupForm.controls['password'].value;
+    const businessName = this.signupForm.controls['businessName'].value
 
     if(this.signupForm.invalid) return;
 
     try {
-      const res = await this._authSvc.signUp(email, password);
+      await this._authSvc.signUp(email, password, businessName);
       this._routerSvc.navigate(['/main']);
-      this._toastSvc.show('Bienvenido 😊');
+      this._toastSvc.show('Bienvenid@ 😊');
     } catch (error) {
       this._toastSvc.show('Error al registrar cuenta ❌');
     }

@@ -30,7 +30,7 @@ export class SettingComponent  implements OnInit {
     private _authSvc: AuthService,
     private _cameraSvc: CameraService,
     private _themeSvc: ThemeService,
-    private _alertSvc: AlertService,
+    private _alertSvc: AlertService
   ) { }
 
   ngOnInit() {
@@ -109,6 +109,10 @@ export class SettingComponent  implements OnInit {
     } catch (error) {
       this._toastSvc.show('Error al actualizar');
     }
+  }
+
+  async openModalChangeBusinessName () {
+    console.log('Abriendo modal')
   }
 
 }

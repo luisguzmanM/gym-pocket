@@ -12,6 +12,9 @@
     <form class="signup-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
       <ion-title class="ion-text-center ion-margin-top ion-margin-bottom">Crear cuenta</ion-title>
 
+      <ion-input type="text" label="Nombre de tu gimnasio" label-placement="floating" fill="outline" formControlName="businessName"></ion-input>
+      <br>
+
       <ion-input type="email" label="Correo" label-placement="floating" fill="outline" formControlName="email"></ion-input>
       <br>
 
