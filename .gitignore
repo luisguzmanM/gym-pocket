@@ -68,7 +68,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
-# Ignorar archivo de variables de entorno
 src/environments/variables.ts
 /android
 /www
