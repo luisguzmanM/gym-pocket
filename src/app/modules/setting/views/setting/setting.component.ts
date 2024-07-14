@@ -48,7 +48,7 @@ export class SettingComponent  implements OnInit {
       this._routerSvc.navigate(['/auth/login']);
     } catch (error) {
       this.loading = false;
-      this._toastSvc.show('Error al cerrar sesión ❌');
+      this._toastSvc.show('❌ Error al cerrar sesión');
     }
   }
 
@@ -56,7 +56,7 @@ export class SettingComponent  implements OnInit {
     try {
       await this._cameraSvc.selectPicture();
     } catch (error) {
-      this._toastSvc.show('Error al cargar logo ❌');
+      this._toastSvc.show('❌ Error al cargar logo');
     }
   }
 
@@ -83,6 +83,9 @@ export class SettingComponent  implements OnInit {
   }
 
   async deleteAccount() {
+    const businessName = this.user.businessName;
+    const email = this.user.email;
+
     const response = await this._alertSvc.show('Advertencia', '', 'Si confirmas esta acción, se borrará toda la información de tus clientes. Esta acción no se podrá revertir. ¿Seguro que deseas eliminar la cuenta?')
     if (response !== 'confirm') return;
     
@@ -90,8 +93,9 @@ export class SettingComponent  implements OnInit {
 
     try {
       await this._authSvc.deleteCollection(this.userID);
-      await this._authSvc.deleteUser();
+      await this._authSvc.deleteUser();      
       this._routerSvc.navigate(['/auth/login'])
+      this._toastSvc.show(`✅ Se borró la cuenta del gimnasio ${businessName}`);
       this.loading = false;
     } catch (error) {
       this.loading = false;
@@ -107,7 +111,7 @@ export class SettingComponent  implements OnInit {
       this.settingNotificationMessage = false;
       this._toastSvc.show('Actualización exitosa ✅');
     } catch (error) {
-      this._toastSvc.show('Error al actualizar');
+      this._toastSvc.show('❌ Error al guardar mensaje de notificación');
     }
   }
 

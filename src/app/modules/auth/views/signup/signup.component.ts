@@ -37,9 +37,9 @@ export class SignupComponent  implements OnInit {
     try {
       await this._authSvc.signUp(email, password, businessName);
       this._routerSvc.navigate(['/main']);
-      this._toastSvc.show('Bienvenid@ 😊');
+      this._toastSvc.show(`✅ Gimnasio ${businessName} registrado exitosamente`);
     } catch (error) {
-      this._toastSvc.show('Error al registrar cuenta ❌');
+      this._toastSvc.show('❌ Error al registrar cuenta');
     }
 
   }

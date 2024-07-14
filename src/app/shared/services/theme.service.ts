@@ -11,7 +11,6 @@ export class ThemeService {
   constructor() { }
 
   setTheme(darkMode:boolean){
-    console.log('service setting theme dark ', darkMode)
     if(darkMode){
       document.body.setAttribute('color-theme', 'dark');
     } else {

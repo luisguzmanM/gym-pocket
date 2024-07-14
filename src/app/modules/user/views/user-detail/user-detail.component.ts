@@ -9,6 +9,7 @@ import { AppState } from 'src/app/state/app.state';
 import { updateAffiliateData } from 'src/app/state/actions/user.actions';
 import { CameraService } from 'src/app/shared/services/camera.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
+import { ToastService } from 'src/app/shared/services/toast.service';
 
 @Component({
   selector: 'app-user-detail',
@@ -48,7 +49,8 @@ export class UserDetailComponent  implements OnInit {
     private _userSvc: UserService,
     private _store: Store<AppState>,
     private _cameraSvc: CameraService,
-    private _authSvc: AuthService
+    private _authSvc: AuthService,
+    private _toastSvc: ToastService,
   ) { }
 
   ngOnInit() {
@@ -102,7 +104,7 @@ export class UserDetailComponent  implements OnInit {
           this._modalCtrl.dismiss(customerID);
           this.loading = false;
         } catch (error) {
-          console.error('Error al eliminar el usuario:', error);
+          this._toastSvc.show('❌ Error al eliminar al cliente');
           this.loading = false;
         }   
       }
@@ -158,7 +160,7 @@ export class UserDetailComponent  implements OnInit {
       this.enableSaveButton = false;
       this.closeUserDetail();
     } catch (error) {
-      console.error('Error al actualizar el usuario:', error);
+      console.error('❌ Error al actualizar el usuario:', error);
       this.loading = false;
     }
   }

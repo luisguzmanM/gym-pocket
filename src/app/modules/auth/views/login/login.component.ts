@@ -35,11 +35,10 @@ export class LoginComponent  implements OnInit {
 
     try {
       const res = await this._authSvc.login(email, password);
-      console.log('Inicio de sesión exitoso', res);
       this._routerSvc.navigate(['/main'])
-      this._toastSvc.show('Bienvenido 😊');
+      this._toastSvc.show(`✅ Bienvenido ${res.user?.email}`);
     } catch (error) {
-      this._toastSvc.show('Error al iniciar sesión ❌');
+      this._toastSvc.show('❌ Error al iniciar sesión');
     }
 
   }
