@@ -35,8 +35,14 @@ export class LoginComponent  implements OnInit {
 
     try {
       const res = await this._authSvc.login(email, password);
-      this._routerSvc.navigate(['/main'])
-      this._toastSvc.show(`✅ Bienvenido ${res.user?.email}`);
+
+      if(res.user?.emailVerified){
+        this._routerSvc.navigate(['/main'])
+        this._toastSvc.show(`✅ Inicio de sesión exitoso`);
+      } else {
+        this._toastSvc.show(`❌ Parece que no has verificado tu cuenta mediante el link enviado a ${email}`);
+      }
+
     } catch (error) {
       this._toastSvc.show('❌ Error al iniciar sesión');
     }

@@ -35,9 +35,12 @@ export class SignupComponent  implements OnInit {
     if(this.signupForm.invalid) return;
 
     try {
-      await this._authSvc.signUp(email, password, businessName);
-      this._routerSvc.navigate(['/main']);
-      this._toastSvc.show(`✅ Gimnasio ${businessName} registrado exitosamente`);
+      // await this._authSvc.signUp(email, password, businessName);
+      // this._routerSvc.navigate(['/main']);
+      const response = await this._authSvc.registerWithEmailAndPassword(email, password, businessName);
+      this._toastSvc.show(`✅ Hemos enviado un email de verificación a ${email}. Por favor verifica tu correo electrónico para poder iniciar sesión`);
+      this._routerSvc.navigate(['/auth/login']);
+      console.log(response)
     } catch (error) {
       this._toastSvc.show('❌ Error al registrar cuenta');
     }

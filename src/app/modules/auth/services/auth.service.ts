@@ -5,6 +5,8 @@ import { initializeApp } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { doc, getFirestore, updateDoc } from 'firebase/firestore';
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, User  } from "firebase/auth";
+
 
 @Injectable({
   providedIn: 'root'
@@ -13,35 +15,12 @@ export class AuthService {
 
   private app = initializeApp(environment.firebaseConfig);
   private db = getFirestore(this.app);
+  auth = getAuth();
 
   constructor(
     private afAuth: AngularFireAuth,
     private afs: AngularFirestore
   ) { }
-
-  async signUp(email: string, password: string, businessName: string) {
-    try {
-      const userCredential = await this.afAuth.createUserWithEmailAndPassword(email, password);
-      const user = userCredential.user;
-
-      if (user) {
-        await this.afs.collection('gym').doc(user.uid).set({
-          email: user.email,          
-          ownerId: user.uid,
-          logoURL: 'https://ionicframework.com/docs/img/demos/avatar.svg',
-          businessName: businessName,
-          password: password,
-          notificationMessage: 'Estimado usuario, tu gimnasio te recuerda ponerte al día con tu mensualidad.',
-          theme: 'light'
-        });
-      }
-
-      return userCredential;
-    } catch (error: unknown) {
-      const errorMessage = (error as Error).message;
-      throw new Error(`Error en el registro: ${errorMessage}`);
-    }
-  }
 
   async login(email: string, password: string) {
     try {
@@ -103,4 +82,33 @@ export class AuthService {
     }
   }
 
+  async registerWithEmailAndPassword(email:string, password:string, businessName: string):Promise<UserCredential>{
+    try {
+      const newUserCredential: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const { user } = newUserCredential;
+
+      if (user) {
+        await this.afs.collection('gym').doc(user.uid).set({
+          email: user.email,          
+          ownerId: user.uid,
+          logoURL: 'https://ionicframework.com/docs/img/demos/avatar.svg',
+          businessName: businessName,
+          password: password,
+          notificationMessage: 'Estimado usuario, tu gimnasio te recuerda ponerte al día con tu mensualidad.',
+          theme: 'light'
+        });
+      }
+
+      await sendEmailVerification(user);
+
+      return newUserCredential;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+}
+
+type UserCredential = {
+  user: User
 }
