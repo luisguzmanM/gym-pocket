@@ -22,6 +22,30 @@ export class AuthService {
     private afs: AngularFirestore
   ) { }
 
+  async registerWithEmailAndPassword(email:string, password:string, businessName: string):Promise<UserCredential>{
+    try {
+      const newUserCredential: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
+      const { user } = newUserCredential;
+
+      if (user) {
+        await this.afs.collection('gym').doc(user.uid).set({
+          email: user.email,          
+          ownerId: user.uid,
+          logoURL: 'https://ionicframework.com/docs/img/demos/avatar.svg',
+          businessName: businessName,
+          password: password,
+          notificationMessage: `Estimado usuario, ${businessName} te recuerda ponerte al día con tu mensualidad`,
+        });
+      }
+
+      await sendEmailVerification(user);
+
+      return newUserCredential;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async login(email: string, password: string) {
     try {
       return await this.afAuth.signInWithEmailAndPassword(email, password);
@@ -79,31 +103,6 @@ export class AuthService {
       return await updateDoc(affiliateDocRef, gym);
     } else {
       throw new Error ('Error al actualizar usuario');
-    }
-  }
-
-  async registerWithEmailAndPassword(email:string, password:string, businessName: string):Promise<UserCredential>{
-    try {
-      const newUserCredential: UserCredential = await createUserWithEmailAndPassword(this.auth, email, password);
-      const { user } = newUserCredential;
-
-      if (user) {
-        await this.afs.collection('gym').doc(user.uid).set({
-          email: user.email,          
-          ownerId: user.uid,
-          logoURL: 'https://ionicframework.com/docs/img/demos/avatar.svg',
-          businessName: businessName,
-          password: password,
-          notificationMessage: 'Estimado usuario, tu gimnasio te recuerda ponerte al día con tu mensualidad.',
-          theme: 'light'
-        });
-      }
-
-      await sendEmailVerification(user);
-
-      return newUserCredential;
-    } catch (error) {
-      throw error;
     }
   }
 

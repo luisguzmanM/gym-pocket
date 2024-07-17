@@ -19,7 +19,7 @@
     </div>
   
     <div class="ion-text-center">
-      <h1>{{ user.businessName }}</h1>
+      <h1 [ngClass]="{'parpadeo': showBlinkInBusinessName === true}">{{ user.businessName }}</h1>
       <p>{{ user.email }}</p>
     </div>
   
@@ -45,11 +45,29 @@
           <ion-item>
             <ion-label>Nombre comercial</ion-label>
             <ion-buttons slot="end">
-              <ion-button color="primary" shape="" fill="clear" (click)="openModalChangeBusinessName()">
+              <ion-button color="primary" shape="" fill="clear" (click)="settingBusinessName = !settingBusinessName">
                 <ion-icon slot="icon-only" name="pencil-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
           </ion-item>
+
+          @if(settingBusinessName){
+            <ion-item>
+              <ion-textarea
+                labelPlacement="floating" 
+                fill="outline" 
+                rows="5" 
+                [formControl]="businessName"
+                [counter]="true"
+                maxlength="20"
+                [(ngModel)]="user.businessName"
+              ></ion-textarea>
+            </ion-item>
+  
+            <ion-button expand="block" (click)="setBusinessName()" [disabled]="businessName.invalid || user.businessName === currentBusinessName">
+              Guardar mensaje
+            </ion-button>
+          }
   
           <ion-item>
             <ion-label>Contraseña de la cuenta</ion-label>

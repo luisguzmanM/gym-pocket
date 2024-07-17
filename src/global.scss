@@ -73,3 +73,30 @@ p {
 .p-absolute {
   position: absolute;
 }
+
+// start animation
+@keyframes parpadeo {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+.parpadeo {
+  animation-name: parpadeo;
+  animation-duration: 1.2s;
+  animation-timing-function: linear;
+  animation-iteration-count: 3;
+  -webkit-animation-name: parpadeo;
+  -webkit-animation-duration: 1.2s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: 3;
+  -webkit-transition: all .4s ease-in;
+  -moz-transition: all .4s ease-in;
+  -ms-transition: all .4s ease-in;
+  -o-transition: all .4s ease-in;
+  transition: all .4s ease-in;
+}
+// end animation

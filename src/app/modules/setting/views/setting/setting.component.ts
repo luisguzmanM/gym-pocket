@@ -24,6 +24,11 @@ export class SettingComponent  implements OnInit {
   notificationMessage: FormControl = new FormControl('', [Validators.maxLength(200)]);
   currentNotificationMessage: string = '';
 
+  settingBusinessName: boolean = false;
+  businessName: FormControl = new FormControl('', [Validators.maxLength(20)]);
+  currentBusinessName: string = '';
+  showBlinkInBusinessName: boolean = false;
+
   constructor(
     private _routerSvc: Router,
     private _toastSvc: ToastService,
@@ -74,6 +79,7 @@ export class SettingComponent  implements OnInit {
     this._authSvc.getUserData(this.userID).subscribe(data => {
       this.user = data;
       this.currentNotificationMessage = this.user.notificationMessage;
+      this.currentBusinessName = this.user.businessName;
       this.loading = false;
     })
   }
@@ -84,7 +90,6 @@ export class SettingComponent  implements OnInit {
 
   async deleteAccount() {
     const businessName = this.user.businessName;
-    const email = this.user.email;
 
     const response = await this._alertSvc.show('Advertencia', '', 'Si confirmas esta acción, se borrará toda la información de tus clientes. Esta acción no se podrá revertir. ¿Seguro que deseas eliminar la cuenta?')
     if (response !== 'confirm') return;
@@ -115,8 +120,20 @@ export class SettingComponent  implements OnInit {
     }
   }
 
-  async openModalChangeBusinessName () {
-    console.log('Abriendo modal')
+  async setBusinessName() {
+    this.loading = true;
+    try {
+      await this._authSvc.updateUser(this.user);
+      this.settingBusinessName = false;
+      this.loading = false;
+      this._toastSvc.show('Actualización exitosa ✅');
+      this.showBlinkInBusinessName = true;
+      setTimeout(() => {
+        this.showBlinkInBusinessName = false;
+      }, 3000);
+    } catch (error) {
+      this._toastSvc.show('❌ Error al establecer nombre');
+    }
   }
 
 }
