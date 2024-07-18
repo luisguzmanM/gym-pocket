@@ -29,6 +29,31 @@ export class SettingComponent  implements OnInit {
   currentBusinessName: string = '';
   showBlinkInBusinessName: boolean = false;
 
+  settingPassword: boolean = false;
+  password: FormControl = new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]);
+  currentPassword: string = '';
+
+  public alertButtons = [
+    {
+      text: 'Cancelar',
+      role: 'cancel',
+      handler: () => {
+        this.updatePassword(false)
+      },
+    },
+    {
+      text: 'Confirmar',
+      role: 'confirm',
+      handler: () => {
+        this.updatePassword(true)
+      },
+    },
+  ];
+
+  setResult(event:any) {
+    console.log(`Dismissed with role: ${event.detail.role}`);
+  }
+
   constructor(
     private _routerSvc: Router,
     private _toastSvc: ToastService,
@@ -80,6 +105,7 @@ export class SettingComponent  implements OnInit {
       this.user = data;
       this.currentNotificationMessage = this.user.notificationMessage;
       this.currentBusinessName = this.user.businessName;
+      this.currentPassword = this.user.password;
       this.loading = false;
     })
   }
@@ -133,6 +159,21 @@ export class SettingComponent  implements OnInit {
       }, 3000);
     } catch (error) {
       this._toastSvc.show('❌ Error al establecer nombre');
+    }
+  }
+
+  async updatePassword(option:boolean){
+    if(!option) return;
+    
+    this.loading = true;
+    try {
+      await this._authSvc.updatePassword(this.user.email);
+      this.settingPassword = false;
+      this.loading = false;
+      this.logOut();
+      this._toastSvc.show('Email enviado. Revisa tu bandeja de entrada ✅');
+    } catch (error) {
+      
     }
   }
 

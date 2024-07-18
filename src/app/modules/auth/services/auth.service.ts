@@ -5,7 +5,7 @@ import { initializeApp } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { doc, getFirestore, updateDoc } from 'firebase/firestore';
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, User  } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, User, sendPasswordResetEmail } from "firebase/auth";
 
 
 @Injectable({
@@ -104,6 +104,18 @@ export class AuthService {
     } else {
       throw new Error ('Error al actualizar usuario');
     }
+  }
+
+  async updatePassword(email:string = 'guzmanluis.lg@gmail.com'){
+    sendPasswordResetEmail(this.auth, email)
+      .then(() => {
+        console.log('📩 Password resent email send')
+      })
+      .catch((error) => {
+        const errorCode = error.code;
+        const errorMessage = error.message;
+        console.log('❌', errorCode, '📩', errorMessage)
+      });
   }
 
 }

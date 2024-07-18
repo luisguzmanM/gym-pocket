@@ -72,11 +72,18 @@
           <ion-item>
             <ion-label>Contraseña de la cuenta</ion-label>
             <ion-buttons slot="end">
-              <ion-button color="primary" shape="" fill="clear">
+              <ion-button color="primary" shape="" fill="clear" id="update-password">
                 <ion-icon slot="icon-only" name="key-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
           </ion-item>
+
+          <ion-alert
+            trigger="update-password"
+            [header]="'Enviaremos un correo para el cambio de contraseña'"
+            [buttons]="alertButtons"
+            (didDismiss)="setResult($event)"
+          ></ion-alert>
   
           <ion-item>
             <ion-label>Mensaje de notificación</ion-label>
