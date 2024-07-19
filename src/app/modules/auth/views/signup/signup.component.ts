@@ -35,8 +35,7 @@ export class SignupComponent  implements OnInit {
     if(this.signupForm.invalid) return;
 
     try {
-      const response = await this._authSvc.registerWithEmailAndPassword(email, password, businessName);
-      console.log(response)
+      await this._authSvc.registerWithEmailAndPassword(email, password, businessName);
       this._toastSvc.show(`✅ Hemos enviado un email de verificación a ${email}. Por favor verifica tu correo electrónico para poder iniciar sesión`);
       this._routerSvc.navigate(['/auth/login']);
     } catch (error) {

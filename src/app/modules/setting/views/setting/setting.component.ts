@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Reference } from '@angular/fire/compat/storage/interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -188,14 +189,35 @@ export class SettingComponent  implements OnInit {
   async updateLogo() {
     this.loading = true;
     if(this.logo.value === '') return;
+
     try {
       const logoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('logo', this.logo.value);
       const logoURL = await logoUploaded.ref.getDownloadURL();
+
+      const oldStorageRef = this.user.storageRef;
+      if (oldStorageRef) {
+        await this.deleteCurrentLogoAfterUploadNewLogo(oldStorageRef);
+      }
+
+      this.user.storageRef = logoUploaded.ref.fullPath;
       this.user.logoURL = logoURL;
       await this._authSvc.updateUser(this.user);
+
       this.loading = false;
+      this._toastSvc.show('✅ Logo actualizado con éxito');
     } catch (error) {
-      this._toastSvc.show('❌ Error al cargar logo');
+      this._toastSvc.show('❌ Error al actualizar logo');
+      console.error(error);
+      this.loading = false;
+    }
+  }
+
+  async deleteCurrentLogoAfterUploadNewLogo(oldStorageRef: any) {
+    try {
+      await this._cameraSvc.deleteAsset(oldStorageRef);
+    } catch (error) {
+      console.error('Error al eliminar el logo antiguo:', error);
+      throw error;
     }
   }
 

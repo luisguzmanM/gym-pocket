@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -46,6 +47,12 @@ export class CameraService {
       ia[i] = byteString.charCodeAt(i);
     }
     return new Blob([ab], { type: mimeString });
+  }
+
+  async deleteAsset(storagePath: string): Promise<void> {
+    const storage = getStorage();
+    const storageRef = ref(storage, storagePath);
+    return await deleteObject(storageRef);
   }
   
 }

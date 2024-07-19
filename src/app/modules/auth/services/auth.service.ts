@@ -35,6 +35,7 @@ export class AuthService {
           businessName: businessName,
           password: password,
           notificationMessage: `Estimado usuario, ${businessName} te recuerda ponerte al día con tu mensualidad`,
+          storageRef: ''
         });
       }
 
