@@ -20,20 +20,28 @@ export class SettingComponent  implements OnInit {
   user: any = {};
   darkMode!: BehaviorSubject<boolean>;
   darkModeValue: boolean = false;
+
+  // Notification message
   settingNotificationMessage: boolean = false;
   notificationMessage: FormControl = new FormControl('', [Validators.maxLength(200)]);
   currentNotificationMessage: string = '';
 
+  // Logo
+  logo: FormControl = new FormControl('')
+  currentLogoURL: string = '';
+
+  // Business name
   settingBusinessName: boolean = false;
   businessName: FormControl = new FormControl('', [Validators.maxLength(20)]);
   currentBusinessName: string = '';
   showBlinkInBusinessName: boolean = false;
 
+  // Password
   settingPassword: boolean = false;
   password: FormControl = new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(16)]);
   currentPassword: string = '';
 
-  public alertButtons = [
+  buttonsUpdatePasswordAlertModal = [
     {
       text: 'Cancelar',
       role: 'cancel',
@@ -49,10 +57,6 @@ export class SettingComponent  implements OnInit {
       },
     },
   ];
-
-  setResult(event:any) {
-    console.log(`Dismissed with role: ${event.detail.role}`);
-  }
 
   constructor(
     private _routerSvc: Router,
@@ -82,14 +86,6 @@ export class SettingComponent  implements OnInit {
     }
   }
 
-  async selectLogo() {
-    try {
-      await this._cameraSvc.selectPicture();
-    } catch (error) {
-      this._toastSvc.show('❌ Error al cargar logo');
-    }
-  }
-
   getUser(): void {
     this.loading = true;
     this._authSvc.getUser().subscribe(user => {
@@ -106,6 +102,7 @@ export class SettingComponent  implements OnInit {
       this.currentNotificationMessage = this.user.notificationMessage;
       this.currentBusinessName = this.user.businessName;
       this.currentPassword = this.user.password;
+      this.currentLogoURL = this.user.logoURL
       this.loading = false;
     })
   }
@@ -174,6 +171,31 @@ export class SettingComponent  implements OnInit {
       this._toastSvc.show('Email enviado. Revisa tu bandeja de entrada ✅');
     } catch (error) {
       
+    }
+  }
+
+  async selectLogo() {
+    try {
+      const newLogo = await this._cameraSvc.selectPicture();
+      this.currentLogoURL = newLogo.dataUrl;
+      this.logo.setValue(newLogo);
+      this.updateLogo()
+    } catch (error) {
+      this._toastSvc.show('❌ Error al seleccionar logo');
+    }
+  }
+
+  async updateLogo() {
+    this.loading = true;
+    if(this.logo.value === '') return;
+    try {
+      const logoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('logo', this.logo.value);
+      const logoURL = await logoUploaded.ref.getDownloadURL();
+      this.user.logoURL = logoURL;
+      await this._authSvc.updateUser(this.user);
+      this.loading = false;
+    } catch (error) {
+      this._toastSvc.show('❌ Error al cargar logo');
     }
   }
 

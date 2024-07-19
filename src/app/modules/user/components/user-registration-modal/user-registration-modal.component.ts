@@ -86,7 +86,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     this.loading = true;
     try {
       if(this.formCtrl.controls['photoURL'].value !== ''){
-        const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage(this.customerPhoto);
+        const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('customerPhoto', this.customerPhoto);
         const photoURL = await photoUploaded.ref.getDownloadURL();
         this.formCtrl.controls['photoURL'].setValue(photoURL);
       } else {

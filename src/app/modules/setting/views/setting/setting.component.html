@@ -13,7 +13,7 @@
     <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
       <div class="p-relative">
         <ion-avatar>
-          <img [src]="user.logoURL" />
+          <img [src]="user.logoURL"/>
         </ion-avatar>
       </div>
     </div>
@@ -81,8 +81,7 @@
           <ion-alert
             trigger="update-password"
             [header]="'Enviaremos un correo para el cambio de contraseña'"
-            [buttons]="alertButtons"
-            (didDismiss)="setResult($event)"
+            [buttons]="buttonsUpdatePasswordAlertModal"
           ></ion-alert>
   
           <ion-item>

@@ -27,11 +27,11 @@ export class CameraService {
     })
   }
 
-  async uploadPhotoToCloudStorage(imageData: any) {
+  async uploadPhotoToCloudStorage(bucket:string, imageData: any) {
     const { dataUrl, format } = imageData;
     const randomNumber = Math.floor(Math.random() * 10000);
     const fileName = `${new Date().getTime()}_${randomNumber}.${format}`;
-    const filePath = `customerPhoto/${fileName}`;
+    const filePath = `${bucket}/${fileName}`;
     const blob = this.dataURItoBlob(dataUrl);
     const uploadTask = this._storage.upload(filePath, blob, { contentType: `image/${format}` });
     return uploadTask;

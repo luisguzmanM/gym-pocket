@@ -148,7 +148,7 @@ export class UserDetailComponent  implements OnInit {
     this.loading = true;
     try {
       this.formCtrl.controls['photoURL'].setValue(this.customerPhotoDataUpdate);
-      const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage(this.formCtrl.controls['photoURL'].value);
+      const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('customerPhoto' ,this.formCtrl.controls['photoURL'].value);
       const photoURL = await photoUploaded.ref.getDownloadURL();
       this.formCtrl.controls['photoURL'].setValue(photoURL);
       await this._userSvc.updateAffiliate(this.formCtrl.value);
