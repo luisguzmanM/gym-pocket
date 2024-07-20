@@ -14,4 +14,8 @@ export class UserPanelInfoComponent  implements OnInit {
 
   ngOnInit(): void {}
 
+  onRadioChange(event:any){
+    console.log(event.target.value)
+  }
+
 }

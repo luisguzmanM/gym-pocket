@@ -1,7 +1,6 @@
 <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
   <ion-avatar>
     <img [src]="data.photoURL" />
-
     <span class="status" [ngClass]="data.isPaymentDue ? 'overdue' : 'paid'" id="popover-status"></span>
   </ion-avatar>
 </div>
@@ -13,6 +12,10 @@
 </ion-popover>
 
 <ion-card>
+  <ion-card-header>
+    <ion-card-title class="ion-padding-start ion-padding-top">Datos</ion-card-title>
+  </ion-card-header>
+
   <ion-card-content>
     <ion-list>
       <ion-item lines="none">
@@ -57,5 +60,36 @@
         <ion-label>Fec. inicio: {{ data.startDate }}</ion-label>
       </ion-item>
     </ion-list>
+  </ion-card-content>
+</ion-card>
+
+<ion-card>
+  <ion-card-header>
+    <ion-card-title class="ion-padding-start ion-padding-top d-flex gap-10">
+      Membresía
+      <ion-icon name="information-circle-outline" id="popover-membership-info"></ion-icon>
+    </ion-card-title>
+  </ion-card-header>
+
+  <ion-popover trigger="popover-membership-info" triggerAction="click">
+    <ng-template>
+      <ion-content class="ion-padding">
+        En este apartado puedes manipular el estado de la membresía del usuario. Si el usuario confirma el pago de su membresía, marca la opción 'Al día', de lo contrario, debe estar marcada la opción 'Con deuda'
+      </ion-content>
+    </ng-template>
+  </ion-popover>
+
+  <ion-card-content>    
+    <ion-radio-group (ionChange)="onRadioChange($event)" [value]="data.isPaymentDue ? 'overdue' : 'paid'">
+      <div class="d-flex ion-justify-content-between ion-margin-bottom">
+        <ion-label>Al día</ion-label>
+        <ion-radio slot="start" value="paid" justify="space-between" color="success"></ion-radio>
+      </div>
+
+      <div class="d-flex ion-justify-content-between ion-margin-bottom">
+        <ion-label>Con deuda</ion-label>
+        <ion-radio slot="start" value="overdue" justify="space-between" color="danger"></ion-radio>
+      </div>
+    </ion-radio-group>
   </ion-card-content>
 </ion-card>
