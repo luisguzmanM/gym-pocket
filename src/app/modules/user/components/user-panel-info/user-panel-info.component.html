@@ -1,7 +1,7 @@
 <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
   <ion-avatar>
     <img [src]="data.photoURL" />
-    <span class="status" [ngClass]="data.isPaymentDue ? 'overdue' : 'paid'" id="popover-status"></span>
+    <span class="status" [ngClass]="data.isPaymentDue === true ? 'overdue' : 'paid'" id="popover-status"></span>
   </ion-avatar>
 </div>
 

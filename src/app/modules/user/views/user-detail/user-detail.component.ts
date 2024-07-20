@@ -38,6 +38,7 @@ export class UserDetailComponent  implements OnInit {
     docNumber: new FormControl('', Validators.required),
     startDate: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
+    isPaymentDue: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
     photoURL: new FormControl('', [Validators.required]),
   });
@@ -131,6 +132,7 @@ export class UserDetailComponent  implements OnInit {
     this.formCtrl.controls['docNumber'].setValue(this.data.docNumber);
     this.formCtrl.controls['phoneNumber'].setValue(this.data.phoneNumber);
     this.formCtrl.controls['countryCode'].setValue(this.data.countryCode);
+    this.formCtrl.controls['isPaymentDue'].setValue(this.data.isPaymentDue);
     this.formCtrl.controls['startDate'].setValue(this.data.startDate);
     this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
   }
@@ -171,7 +173,6 @@ export class UserDetailComponent  implements OnInit {
 
   setUpdateCustomerPhoto(event: any){
     this.customerPhotoDataUpdate = event;
-    console.log(this.customerPhotoDataUpdate)
   }
 
   getUser(): void {
@@ -189,6 +190,22 @@ export class UserDetailComponent  implements OnInit {
       this.user = data;
       this.loading = false;
     })
+  }
+
+  async changeMembershipState(event:string){
+    const isPaymentDue = event === 'overdue' ? true : false;
+
+    this.setInitialUserData();
+    this.formCtrl.addControl('customerID', new FormControl(this.data.customerID));
+    this.formCtrl.controls['isPaymentDue'].setValue(isPaymentDue);
+
+    try {
+      await this._userSvc.updateAffiliate(this.formCtrl.value);
+      console.log('Con deuda? ', this.formCtrl.controls['isPaymentDue'].value);
+      this._store.dispatch(updateAffiliateData({ user: this.formCtrl.value }));
+    } catch (error) {
+      console.error('❌ Error al actualizar el usuario:', error);
+    }
   }
 
 }

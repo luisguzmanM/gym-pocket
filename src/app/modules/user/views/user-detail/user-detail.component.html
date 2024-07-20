@@ -37,7 +37,7 @@
   }
 
   @if (!update && !loading) {
-    <app-user-panel-info [data]="data"></app-user-panel-info>
+    <app-user-panel-info [data]="data" (membershipStateEmitter)="changeMembershipState($event)"></app-user-panel-info>
   }
   
   @if(update && !loading){

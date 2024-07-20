@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { User } from '../../models/user.model';
 
 @Component({
@@ -9,13 +9,14 @@ import { User } from '../../models/user.model';
 export class UserPanelInfoComponent  implements OnInit {
 
   @Input() data!: User;
+  @Output() membershipStateEmitter: EventEmitter<string> = new EventEmitter<string>();
 
   constructor() { }
 
   ngOnInit(): void {}
 
   onRadioChange(event:any){
-    console.log(event.target.value)
+    this.membershipStateEmitter.emit(event.target.value);
   }
 
 }
