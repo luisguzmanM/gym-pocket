@@ -1,5 +1,22 @@
 ion-avatar {
   width: 150px;
-  height: 150px;
-  // --border-radius: 4px;
+  height: 150px;  
+  position: relative;
+}
+
+.status {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+.paid {
+  background-color: lightgreen;
+}
+
+.overdue {
+  background-color: lightcoral;
 }
