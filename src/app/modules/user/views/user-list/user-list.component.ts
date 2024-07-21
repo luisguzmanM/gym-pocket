@@ -126,14 +126,19 @@ export class UserListComponent  implements OnInit {
     })
   }
 
-  checkPaymentDay(userList:any){
-    const year = new Date().getFullYear();
-    const month = new Date().getMonth() + 1;
-    const day = new Date().getDate();
-    const currentDate = `${year}-${month}-${day}`;
-    userList.map((x:any) => {
-      if(x.startDate.split('-')[2] === currentDate.split('-')[2]) x.isPaymentDue = true; 
-    })
+  checkPaymentDay(userList: any) {
+    const currentDate = new Date();
+    const currentDay = currentDate.getDate();
+  
+    userList.forEach((user: any) => {
+      const nextPaymentDate = new Date(user.startDate);
+
+      if (currentDay >= nextPaymentDate.getDate() && currentDate >= nextPaymentDate) {
+        user.isPaymentDue = true;
+      } else {
+        user.isPaymentDue = false;
+      }
+    });
   }
 
 }
