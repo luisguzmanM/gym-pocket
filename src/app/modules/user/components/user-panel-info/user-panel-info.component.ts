@@ -10,12 +10,19 @@ export class UserPanelInfoComponent  implements OnInit {
 
   @Input() data!: User;
   @Output() membershipStateEmitter: EventEmitter<string> = new EventEmitter<string>();
+  isPaymentDue: boolean = false;
 
   constructor() { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if(this.data){
+      this.isPaymentDue = this.data.isPaymentDue
+    }
+  }
 
   onRadioChange(event:any){
+    if(event.target.value === 'overdue') this.isPaymentDue = true;
+    if(event.target.value === 'paid') this.isPaymentDue = false;
     this.membershipStateEmitter.emit(event.target.value);
   }
 
