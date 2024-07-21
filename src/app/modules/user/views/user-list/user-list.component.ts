@@ -60,6 +60,7 @@ export class UserListComponent  implements OnInit {
     try {
       this._store.dispatch(loadUserList());
       const userList = await this._userSvc.getAffiliateList(); // Get clients from database.
+      this.checkPaymentDay(userList); 
       this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
     } catch (error) {
       this.isConnected = false;
@@ -122,6 +123,16 @@ export class UserListComponent  implements OnInit {
         this.lastAddedUserID = null;
         this._store.dispatch(removeUser({ userId: customer.data }));
       }, 3000)
+    })
+  }
+
+  checkPaymentDay(userList:any){
+    const year = new Date().getFullYear();
+    const month = new Date().getMonth() + 1;
+    const day = new Date().getDate();
+    const currentDate = `${year}-${month}-${day}`;
+    userList.map((x:any) => {
+      if(x.startDate.split('-')[2] === currentDate.split('-')[2]) x.isPaymentDue = true; 
     })
   }
 
