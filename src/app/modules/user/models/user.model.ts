@@ -5,7 +5,7 @@ export type User = {
   dateOfBirth: string;
   typeDocIdentity: string;
   docNumber: string;
-  startDate: string;
+  nextPaymentDate: string;
   countryCode: number
   phoneNumber: number;
   photoURL: string;

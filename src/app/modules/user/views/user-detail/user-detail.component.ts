@@ -38,7 +38,7 @@ export class UserDetailComponent  implements OnInit {
     dateOfBirth: new FormControl('', [Validators.required]),
     typeDocIdentity: new FormControl('', Validators.required),
     docNumber: new FormControl('', Validators.required),
-    startDate: new FormControl('', Validators.required),
+    nextPaymentDate: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
     isPaymentDue: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
@@ -136,7 +136,7 @@ export class UserDetailComponent  implements OnInit {
     this.formCtrl.controls['phoneNumber'].setValue(this.data.phoneNumber);
     this.formCtrl.controls['countryCode'].setValue(this.data.countryCode);
     this.formCtrl.controls['isPaymentDue'].setValue(this.data.isPaymentDue);
-    this.formCtrl.controls['startDate'].setValue(this.data.startDate);
+    this.formCtrl.controls['nextPaymentDate'].setValue(this.data.nextPaymentDate);
     this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
   }
 
@@ -211,11 +211,11 @@ export class UserDetailComponent  implements OnInit {
       nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
     } else {
       // Si el pago está atrasado, restar un mes a la fecha de pago actual
-      nextPaymentDate = new Date(this.data.startDate);
+      nextPaymentDate = new Date(this.data.nextPaymentDate);
       nextPaymentDate.setMonth(nextPaymentDate.getMonth() - 1);
     }
   
-    this.formCtrl.controls['startDate'].setValue(nextPaymentDate.toISOString().split('T')[0]);
+    this.formCtrl.controls['nextPaymentDate'].setValue(nextPaymentDate.toISOString().split('T')[0]);
 
     try {
       await this._userSvc.updateAffiliate(this.formCtrl.value);

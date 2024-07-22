@@ -131,7 +131,7 @@ export class UserListComponent  implements OnInit {
     const currentDay = currentDate.getDate();
   
     userList.forEach((user: any) => {
-      const nextPaymentDate = new Date(user.startDate);
+      const nextPaymentDate = new Date(user.nextPaymentDate);
 
       if (currentDay >= nextPaymentDate.getDate() && currentDate >= nextPaymentDate) {
         user.isPaymentDue = true;

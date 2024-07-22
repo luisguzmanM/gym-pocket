@@ -24,7 +24,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     docNumber: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
-    startDate: new FormControl('', Validators.required),
+    nextPaymentDate: new FormControl('', Validators.required),
     photoURL: new FormControl('')
   });
 
@@ -73,7 +73,7 @@ export class UserRegistrationModalComponent  implements OnInit {
       dateOfBirth: this.formCtrl.controls['dateOfBirth'].value,
       typeDocIdentity: this.formCtrl.controls['typeDocIdentity'].value,
       docNumber: this.formCtrl.controls['docNumber'].value,
-      startDate: this.formCtrl.controls['startDate'].value,
+      nextPaymentDate: this.formCtrl.controls['nextPaymentDate'].value,
       countryCode: this.formCtrl.controls['countryCode'].value,
       phoneNumber: this.formCtrl.controls['phoneNumber'].value,
       photoURL: this.formCtrl.controls['photoURL'].value,

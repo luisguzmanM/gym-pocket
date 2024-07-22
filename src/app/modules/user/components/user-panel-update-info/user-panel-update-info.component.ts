@@ -23,7 +23,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     dateOfBirth: new FormControl('', [Validators.required]),
     typeDocIdentity: new FormControl('', Validators.required),
     docNumber: new FormControl('', Validators.required),
-    startDate: new FormControl('', Validators.required),
+    nextPaymentDate: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
     photoURL: new FormControl('', [Validators.required]),
@@ -50,7 +50,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     this.formCtrl.controls['docNumber'].setValue(this.data.docNumber);
     this.formCtrl.controls['countryCode'].setValue(this.data.countryCode);
     this.formCtrl.controls['phoneNumber'].setValue(this.data.phoneNumber);
-    this.formCtrl.controls['startDate'].setValue(this.data.startDate);
+    this.formCtrl.controls['nextPaymentDate'].setValue(this.data.nextPaymentDate);
     this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
     this.formCtrl.controls['isPaymentDue'].setValue(this.data.isPaymentDue);
 
