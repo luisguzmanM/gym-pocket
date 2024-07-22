@@ -214,10 +214,10 @@ export class UserDetailComponent  implements OnInit {
 
     try {
       await this._userSvc.updateAffiliate(this.formCtrl.value);
-      console.log('Con deuda? ', this.formCtrl.controls['isPaymentDue'].value);
       this._store.dispatch(updateAffiliateData({ user: this.formCtrl.value }));
     } catch (error) {
       console.error('❌ Error al actualizar el usuario:', error);
+      this._toastSvc.show('Error al cambiar estado de pago');
     }
   }
 
