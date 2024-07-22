@@ -199,13 +199,18 @@ export class UserDetailComponent  implements OnInit {
     this.formCtrl.addControl('customerID', new FormControl(this.data.customerID));
     this.formCtrl.controls['isPaymentDue'].setValue(isPaymentDue);
 
-    // Si el pago está al día, actualizar startDate al próximo mes
-    if (isPaymentDue === false) {
-      const currentDate = new Date();
-      const nextMonth = new Date(currentDate);
-      nextMonth.setMonth(currentDate.getMonth() + 1);
-      this.formCtrl.controls['startDate'].setValue(nextMonth.toISOString().split('T')[0]);
+    let nextPaymentDate: Date;
+    if (!isPaymentDue) {
+      // Si el pago está al día, sumar un mes a la fecha actual
+      nextPaymentDate = new Date();
+      nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
+    } else {
+      // Si el pago está atrasado, restar un mes a la fecha de pago actual
+      nextPaymentDate = new Date(this.data.startDate);
+      nextPaymentDate.setMonth(nextPaymentDate.getMonth() - 1);
     }
+  
+    this.formCtrl.controls['startDate'].setValue(nextPaymentDate.toISOString().split('T')[0]);
 
     try {
       await this._userSvc.updateAffiliate(this.formCtrl.value);
