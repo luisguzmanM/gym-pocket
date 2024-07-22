@@ -30,6 +30,8 @@ export class UserDetailComponent  implements OnInit {
   userID: any = null;
   user: any = {};
 
+  previousPhotoURL: string = '';
+
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
     lastName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -40,7 +42,7 @@ export class UserDetailComponent  implements OnInit {
     countryCode: new FormControl('', Validators.required),
     isPaymentDue: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
-    photoURL: new FormControl('', [Validators.required]),
+    photoURL: new FormControl('', [Validators.required])
   });
 
   constructor(
@@ -56,6 +58,7 @@ export class UserDetailComponent  implements OnInit {
 
   ngOnInit() {
     this.getUser();
+    this.previousPhotoURL = this.data.photoURL;
   }
 
   closeUserDetail(): void {
@@ -149,10 +152,12 @@ export class UserDetailComponent  implements OnInit {
   async updateUserDetails(): Promise<void> {
     this.loading = true;
     try {
-      this.formCtrl.controls['photoURL'].setValue(this.customerPhotoDataUpdate);
-      const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('customerPhoto' ,this.formCtrl.controls['photoURL'].value);
-      const photoURL = await photoUploaded.ref.getDownloadURL();
-      this.formCtrl.controls['photoURL'].setValue(photoURL);
+      if(this.previousPhotoURL !== this.formCtrl.controls['photoURL'].value){
+        this.formCtrl.controls['photoURL'].setValue(this.customerPhotoDataUpdate);
+        const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('customerPhoto' ,this.formCtrl.controls['photoURL'].value);
+        const photoURL = await photoUploaded.ref.getDownloadURL();
+        this.formCtrl.controls['photoURL'].setValue(photoURL);
+      }
       await this._userSvc.updateAffiliate(this.formCtrl.value);
 
       // Despacha la acción para actualizar el store
