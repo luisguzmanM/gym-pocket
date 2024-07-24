@@ -26,4 +26,10 @@ export class UserPanelInfoComponent  implements OnInit {
     this.membershipStateEmitter.emit(event.target.value);
   }
 
+  // Método para convertir fecha de YYYY-MM-DD a DD-MM-YYYY
+  getFormattedDisplayDate(date: string): string {
+    const [year, month, day] = date.split('-');
+    return `${day}-${month}-${year}`;
+  }
+
 }

@@ -27,7 +27,7 @@
       </ion-item>
 
       <ion-item lines="none">
-        <ion-label>Fec. nacimiento: {{ data.dateOfBirth }}</ion-label>
+        <ion-label>Fec. nacimiento: {{ getFormattedDisplayDate(data.dateOfBirth) }}</ion-label>
       </ion-item>
 
       <ion-item lines="none">
@@ -57,7 +57,7 @@
       </ion-item>
 
       <ion-item lines="none">
-        <ion-label>Próx. pago: {{ data.nextPaymentDate }}</ion-label>
+        <ion-label>Próx. pago: {{ getFormattedDisplayDate(data.nextPaymentDate) }}</ion-label>
       </ion-item>
     </ion-list>
   </ion-card-content>
