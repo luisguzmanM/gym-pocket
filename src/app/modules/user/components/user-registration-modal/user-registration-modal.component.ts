@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CameraService } from 'src/app/shared/services/camera.service';
-import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -15,6 +14,7 @@ export class UserRegistrationModalComponent  implements OnInit {
   loading: boolean = false;
   customerPhoto: any = {};
   defaultPhotoURL: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
+  nextPaymentDate: string = this.getFormattedDate();
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -24,7 +24,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     docNumber: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
-    nextPaymentDate: new FormControl('', Validators.required),
+    nextPaymentDate: new FormControl(this.nextPaymentDate, Validators.required),
     photoURL: new FormControl('')
   });
 
@@ -53,7 +53,7 @@ export class UserRegistrationModalComponent  implements OnInit {
   }
 
   capitalizeWords(input: string): string {
-    return input.replace(/\b\w/g, char => char.toUpperCase());
+    return input.replace(/(^|\s)([a-záéíóúñü])/gi, (match) => match.toUpperCase());
   }
 
   async takePhotoWithCamera() {
@@ -82,7 +82,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     return payload;
   }
 
-  async saveCustomerInfo(){
+  async saveCustomerInfo() {
     this.loading = true;
     try {
       if(this.formCtrl.controls['photoURL'].value !== ''){
@@ -104,5 +104,21 @@ export class UserRegistrationModalComponent  implements OnInit {
       console.log('Error: ', error);
     }
   }
+
+  private getFormattedDate(): string {
+    const today = new Date();
+    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
+  
+    if (nextMonth.getDate() !== today.getDate()) {
+      nextMonth.setDate(0);
+    }
+  
+    const year = nextMonth.getFullYear();
+    const month = ('0' + (nextMonth.getMonth() + 1)).slice(-2);
+    const day = ('0' + nextMonth.getDate()).slice(-2);
+  
+    return `${year}-${month}-${day}`;
+  }
+  
 
 }

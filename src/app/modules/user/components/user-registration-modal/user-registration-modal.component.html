@@ -57,7 +57,7 @@
       <ion-grid class="ion-no-padding">
         <ion-row class="ion-justify-content-between gap-10">
           <ion-col class="ion-no-padding" size="4">
-            <ion-select interface="popover" label="País" label-placement="floating" fill="outline" formControlName="countryCode">
+            <ion-select interface="popover" label="Cod. país" label-placement="floating" fill="outline" formControlName="countryCode">
               <ion-select-option value="51">+51</ion-select-option>
               <ion-select-option value="58">+58</ion-select-option>
             </ion-select>
@@ -69,7 +69,7 @@
       </ion-grid>
       <br>
       
-      <ion-input type="date" label="Próx. Pago" label-placement="floating" fill="outline"  formControlName="nextPaymentDate"></ion-input>
+      <ion-input type="date" label="Próxima fecha de Pago" label-placement="floating" fill="outline"  formControlName="nextPaymentDate" [value]="nextPaymentDate"></ion-input>
       <br>
   
       <div class="d-flex ion-justify-content-between ion-align-items-center">
