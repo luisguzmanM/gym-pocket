@@ -157,7 +157,7 @@ export class UserListComponent  implements OnInit {
       const options : BannerAdOptions = {
         adId: 'ca-app-pub-6002124924052842/8841520926',
         adSize: BannerAdSize.BANNER,
-        position: BannerAdPosition.BOTTOM_CENTER,
+        position: BannerAdPosition.TOP_CENTER,
         isTesting: true
       };
 
