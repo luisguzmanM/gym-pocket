@@ -23,7 +23,7 @@ export class AdMobService {
       adId: 'ca-app-pub-6002124924052842/8841520926',
       adSize: BannerAdSize.BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
-      isTesting: true,
+      isTesting: false,
     };
 
     await AdMob.showBanner(options).then(() => console.log('✅ Banner Okay!!!'));
