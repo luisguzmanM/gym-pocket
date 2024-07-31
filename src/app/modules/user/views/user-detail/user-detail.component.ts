@@ -67,6 +67,7 @@ export class UserDetailComponent  implements OnInit {
   }
 
   closeUserDetail(): void {
+    this.hideAdsBanner();
     this._modalCtrl.dismiss();
   }
 
@@ -258,6 +259,10 @@ export class UserDetailComponent  implements OnInit {
     } catch (error) {
       console.log('Catch del intento por mostrar el banner -> ', error);
     }
+  }
+
+  async hideAdsBanner(){
+    await AdMob.hideBanner();
   }
 
 }
