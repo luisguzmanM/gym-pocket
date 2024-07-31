@@ -12,36 +12,21 @@ export class AdMobService {
   }
 
   async initializeAds() {
-    try {
-      await AdMob.initialize({
-        requestTrackingAuthorization: true,
-        initializeForTesting: false
-      });
-    } catch (error) {
-      console.log('Error en inicialización de ads');
-    }
+    await AdMob.initialize({
+      requestTrackingAuthorization: true,
+      initializeForTesting: false
+    });
   }
 
   async showAdsBanner() {
-    try {
-      const options : BannerAdOptions = {
-        adId: 'ca-app-pub-6002124924052842/8841520926',
-        adSize: BannerAdSize.BANNER,
-        position: BannerAdPosition.BOTTOM_CENTER,
-        isTesting: true
-      };
+    const options : BannerAdOptions = {
+      adId: 'ca-app-pub-6002124924052842/8841520926',
+      adSize: BannerAdSize.BANNER,
+      position: BannerAdPosition.BOTTOM_CENTER,
+      isTesting: true
+    };
 
-      await AdMob.showBanner(options).then(() => console.log('✅ Banner Okay!!!'));
-
-      // Errores que se mostrarán en la consola de android studios
-      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (error) => {
-        console.log(error.code);
-        console.log(error.message);
-      })
-
-    } catch (error) {
-      console.log('Error al mostrar el banner -> ', error);
-    }
+    await AdMob.showBanner(options).then(() => console.log('✅ Banner Okay!!!'));
   }
 
   async hideAdsBanner(){

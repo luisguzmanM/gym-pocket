@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActionSheetController, ModalController } from '@ionic/angular';
@@ -17,7 +17,7 @@ import { AdMobService } from 'src/app/shared/services/ad-mob.service';
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss'],
 })
-export class UserDetailComponent  implements OnInit {
+export class UserDetailComponent  implements OnInit, OnDestroy {
 
   @Input() data!: User;
   update: boolean = false;
@@ -64,8 +64,11 @@ export class UserDetailComponent  implements OnInit {
     this._adMobSvc.showAdsBanner();
   }
 
-  closeUserDetail(): void {
+  ngOnDestroy() {
     this._adMobSvc.hideAdsBanner();
+  }
+
+  closeUserDetail(): void {
     this._modalCtrl.dismiss();
   }
 
