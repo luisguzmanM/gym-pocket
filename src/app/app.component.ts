@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ThemeService } from './shared/services/theme.service';
+import { AdMobService } from './shared/services/ad-mob.service';
 
 @Component({
   selector: 'app-root',
@@ -9,9 +10,11 @@ import { ThemeService } from './shared/services/theme.service';
 export class AppComponent {
   
   constructor(
-    private _themeSvc: ThemeService
+    private _themeSvc: ThemeService,
+    private _adMobSvc: AdMobService
   ) {
     this._themeSvc.setInitialTheme();
+    this._adMobSvc.initializeAds();
   }
 
 }
