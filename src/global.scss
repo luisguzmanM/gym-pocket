@@ -36,10 +36,6 @@
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
 
-// ion-modal {
-//   padding-top: 50px;
-// }
-
 p {
   margin: 0;
 }
@@ -56,6 +52,10 @@ p {
 
 .gap-10 {
   gap: 10px;
+}
+
+.mb-100 {
+  margin-bottom: 100px;
 }
 
 .full-width {

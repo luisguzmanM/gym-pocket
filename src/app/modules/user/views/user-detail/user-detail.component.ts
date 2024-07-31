@@ -11,6 +11,10 @@ import { CameraService } from 'src/app/shared/services/camera.service';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
 
+// AdMob imports
+import { AdMob } from '@capacitor-community/admob';
+import { BannerAdOptions, BannerAdPluginEvents, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
+
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
@@ -59,6 +63,7 @@ export class UserDetailComponent  implements OnInit {
   ngOnInit() {
     this.getUser();
     this.previousPhotoURL = this.data.photoURL;
+    this.showAdsBanner();
   }
 
   closeUserDetail(): void {
@@ -223,6 +228,35 @@ export class UserDetailComponent  implements OnInit {
     } catch (error) {
       console.error('❌ Error al actualizar el usuario:', error);
       this._toastSvc.show('Error al cambiar estado de pago');
+    }
+  }
+
+  async showAdsBanner() {
+    try {
+      AdMob.initialize({
+        requestTrackingAuthorization: true,
+        initializeForTesting: false
+      })
+
+      // Opciones de banner
+      const options : BannerAdOptions = {
+        adId: 'ca-app-pub-6002124924052842/8841520926',
+        adSize: BannerAdSize.BANNER,
+        position: BannerAdPosition.BOTTOM_CENTER,
+        isTesting: true
+      };
+
+      // Mostrar el banner con las opciones
+      await AdMob.showBanner(options).then(() => console.log('✅ Banner Okay!!!'));
+
+      // Errores que se mostrarán en la consola de android studio
+      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (error) => {
+        console.log(error.code);
+        console.log(error.message);
+      })
+
+    } catch (error) {
+      console.log('Catch del intento por mostrar el banner -> ', error);
     }
   }
 

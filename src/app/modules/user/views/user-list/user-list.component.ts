@@ -15,10 +15,6 @@ import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { UserDetailComponent } from '../user-detail/user-detail.component';
 
-// AdMob imports
-import { AdMob } from '@capacitor-community/admob';
-import { BannerAdOptions, BannerAdPluginEvents, BannerAdPosition, BannerAdSize } from '@capacitor-community/admob';
-
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -44,7 +40,6 @@ export class UserListComponent  implements OnInit {
     this.checkNetworkStatus();
     this.initializeApp();
     this.getUserList();
-    this.showAdsBanner();
   }
 
   initializeApp() {
@@ -144,35 +139,6 @@ export class UserListComponent  implements OnInit {
         user.isPaymentDue = false;
       }
     });
-  }
-
-  async showAdsBanner() {
-    try {
-      AdMob.initialize({
-        requestTrackingAuthorization: true,
-        initializeForTesting: false
-      })
-
-      // Opciones de banner
-      const options : BannerAdOptions = {
-        adId: 'ca-app-pub-6002124924052842/8841520926',
-        adSize: BannerAdSize.BANNER,
-        position: BannerAdPosition.TOP_CENTER,
-        isTesting: true
-      };
-
-      // Mostrar el banner con las opciones
-      await AdMob.showBanner(options).then(() => console.log('✅ Banner Okay!!!'));
-
-      // Errores que se mostrarán en la consola de android studio
-      AdMob.addListener(BannerAdPluginEvents.FailedToLoad, (error) => {
-        console.log(error.code);
-        console.log(error.message);
-      })
-
-    } catch (error) {
-      console.log('Catch del intento por mostrar el banner -> ', error);
-    }
   }
 
 }
