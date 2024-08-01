@@ -61,7 +61,8 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
   ngOnInit() {
     this.getUser();
     this.previousPhotoURL = this.data.photoURL;
-    this._adMobSvc.showAdsBanner();
+    if(this._adMobSvc.bannerStarted === false) this._adMobSvc.showAdsBanner();
+    if(this._adMobSvc.bannerStarted === true) this._adMobSvc.showAdsBannerAgain();
   }
 
   ngOnDestroy() {

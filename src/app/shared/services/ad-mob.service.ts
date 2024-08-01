@@ -7,6 +7,8 @@ import { BannerAdOptions, BannerAdPluginEvents, BannerAdPosition, BannerAdSize }
 })
 export class AdMobService {
 
+  bannerStarted: boolean = false;
+
   constructor() {
     this.initializeAds();
   }
@@ -23,13 +25,17 @@ export class AdMobService {
       adId: 'ca-app-pub-6002124924052842/8841520926',
       adSize: BannerAdSize.BANNER,
       position: BannerAdPosition.BOTTOM_CENTER,
-      isTesting: false,
+      isTesting: true,
     };
 
-    await AdMob.showBanner(options).then(() => console.log('✅ Banner Okay!!!'));
+    await AdMob.showBanner(options).then(() => this.bannerStarted = true);
   }
 
   async hideAdsBanner(){
     await AdMob.hideBanner();
+  }
+
+  async showAdsBannerAgain() {
+    await AdMob.resumeBanner();
   }
 }
