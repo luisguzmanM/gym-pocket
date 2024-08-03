@@ -78,6 +78,12 @@ p {
   position: absolute;
 }
 
+.center-v {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
 // start animation
 @keyframes parpadeo {
   0%, 100% {

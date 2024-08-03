@@ -1,12 +1,22 @@
-<ion-tabs>
-  <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="user-list">
-      <ion-icon name="library-outline"></ion-icon>
-      Clientes
-    </ion-tab-button>
-    <ion-tab-button tab="setting">
-      <ion-icon name="settings-outline"></ion-icon>
-      Configuración
-    </ion-tab-button>
-  </ion-tab-bar>
-</ion-tabs>
+@if(isConnected){
+  <ion-tabs>
+    <ion-tab-bar slot="bottom">
+      <ion-tab-button tab="user-list">
+        <ion-icon name="library-outline"></ion-icon>
+        Clientes
+      </ion-tab-button>
+      <ion-tab-button tab="setting">
+        <ion-icon name="settings-outline"></ion-icon>
+        Configuración
+      </ion-tab-button>
+    </ion-tab-bar>
+  </ion-tabs>
+}
+
+@if(!isConnected){
+  <div class="full-width ion-text-center center-v">
+    <ion-icon name="wifi-outline" size="large" color="danger"></ion-icon>
+    <h3>Hubo un problema</h3>
+    <p>Por favor, verifica tu conexión a internet</p>
+  </div>
+}

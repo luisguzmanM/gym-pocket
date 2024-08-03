@@ -14,6 +14,7 @@ import { Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { App } from '@capacitor/app';
 import { UserDetailComponent } from '../user-detail/user-detail.component';
+import { ConnectionService } from 'src/app/shared/services/connection.service';
 
 @Component({
   selector: 'app-user-list',
@@ -33,13 +34,13 @@ export class UserListComponent  implements OnInit {
     private _modalCtrl: ModalController,
     private _platform: Platform,
     private _location: Location,
-    private _router: Router
+    private _router: Router,
+    private _connectionSvc: ConnectionService
   ) { }
 
   ngOnInit() {
-    this.checkNetworkStatus();
+    this._connectionSvc.getNetworkConnection().subscribe(res => res === true ? this.getUserList() : null);
     this.initializeApp();
-    this.getUserList();
   }
 
   initializeApp() {
@@ -86,23 +87,6 @@ export class UserListComponent  implements OnInit {
 
   addFlicker(userId: string): boolean {
     return this.lastAddedUserID === userId;
-  }
-
-  @HostListener('window:online', ['$event'])
-  onOnline(event: Event) {
-    console.log('Network connected!');
-    this.isConnected = true;
-    this.getUserList();
-  }
-
-  @HostListener('window:offline', ['$event'])
-  onOffline(event: Event) {
-    console.log('Network was disconnected :-(');
-    this.isConnected = false;
-  }
-
-  checkNetworkStatus() {
-    this.isConnected = navigator.onLine;
   }
 
   async openAffiliateDetail(info:User) {

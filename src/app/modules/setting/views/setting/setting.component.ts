@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Reference } from '@angular/fire/compat/storage/interfaces';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { BehaviorSubject } from 'rxjs';
@@ -171,7 +170,8 @@ export class SettingComponent  implements OnInit {
       this.logOut();
       this._toastSvc.show('Email enviado. Revisa tu bandeja de entrada ✅');
     } catch (error) {
-      
+      console.log('Hubo un problema al actualizar la contraseña');
+      throw new Error('Hubo un problema al actualizar la contraseña');
     }
   }
 
