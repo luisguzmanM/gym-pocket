@@ -74,6 +74,8 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
   }
 
   async showMoreOptions() {
+    this._adMobSvc.hideAdsBanner();
+
     const actionSheet = await this._actionSheetCtrl.create({
       header: 'Más opciones',
       buttons: [
@@ -99,12 +101,14 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
   }
 
   updateUserData(): void {
+    this._adMobSvc.showAdsBannerAgain();
     this.update = true;
     this.title = 'Editando datos';
     this.setInitialUserData();
   }
 
   async deleteUser() {
+    this._adMobSvc.showAdsBannerAgain();
     const response = await this._alertSvc.show('Advertencia', '', 'Esta acción no se podrá revertir. ¿Deseas eliminar al usuario?')
 
     if (response === 'confirm') {
@@ -124,6 +128,7 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
   }
 
   notifyToUser(): void {
+    this._adMobSvc.showAdsBannerAgain();
     const phone = `${this.data.countryCode}${this.data.phoneNumber}`;
     this.openChatWithNumber(phone);
   }
