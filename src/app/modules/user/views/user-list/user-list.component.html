@@ -7,13 +7,13 @@
 ></app-header>
 
 <ion-content>
-  @if (loading$ | async) {
+  @if (loading) {
     <div class="d-flex ion-align-items-center ion-justify-content-center full-width full-height">
       <ion-spinner></ion-spinner>
     </div>
   }
 
-  @if ((loading$ | async) === false){
+  @if (loading === false){
     <ion-list>
       @for (user of (userList$ | async); track $index) {
         <app-user-item 
@@ -25,7 +25,7 @@
     </ion-list>
   }
 
-  @if(!(loading$ | async) && (userList$ | async)?.length === 0){
+  @if(!loading && (userList$ | async)?.length === 0){
     <div class="full-width ion-text-center center-v">
       <h3>No hay clientes registrados aún</h3>
       <p>Registra un cliente y mantente informado</p>

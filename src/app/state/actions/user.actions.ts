@@ -25,3 +25,7 @@ export const removeUser = createAction(
   '[User List] Remove User',
   props<{ userId: string }>()
 );
+
+export const logOut = createAction(
+  '[User List] Clean User List'
+);

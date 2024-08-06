@@ -25,6 +25,7 @@ export class UserListComponent  implements OnInit {
 
   userList$: Observable<User[]> = this._store.select((selectUsers));
   loading$: Observable<boolean> = this._store.select((selectLoading));
+  loading: boolean = false;
   lastAddedUserID: string | null = null;
   isConnected:boolean = true;
 
@@ -41,6 +42,7 @@ export class UserListComponent  implements OnInit {
   ngOnInit() {
     this._connectionSvc.getNetworkConnection().subscribe(res => res === true ? this.getUserList() : null);
     this.initializeApp();
+    this.loading$.subscribe(res => res ? this.loading = true : this.loading = false);
   }
 
   initializeApp() {
@@ -58,13 +60,17 @@ export class UserListComponent  implements OnInit {
   }
 
   async getUserList() {
+    this.loading = true;
     try {
       this._store.dispatch(loadUserList());
       const userList = await this._userSvc.getAffiliateList(); // Get clients from database.
+      console.log(userList)
       this.checkPaymentDay(userList); 
       this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
+      this.loading = false;
     } catch (error) {
       this.isConnected = false;
+      this.loading = false;
     }
   }
 

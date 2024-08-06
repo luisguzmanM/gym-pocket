@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { BehaviorSubject } from 'rxjs';
 import { AuthService } from 'src/app/modules/auth/services/auth.service';
 import { AlertService } from 'src/app/shared/services/alert.service';
 import { CameraService } from 'src/app/shared/services/camera.service';
 import { ThemeService } from 'src/app/shared/services/theme.service';
 import { ToastService } from 'src/app/shared/services/toast.service';
+import { logOut } from 'src/app/state/actions/user.actions';
+import { AppState } from 'src/app/state/app.state';
 
 @Component({
   selector: 'app-setting',
@@ -64,7 +67,8 @@ export class SettingComponent  implements OnInit {
     private _authSvc: AuthService,
     private _cameraSvc: CameraService,
     private _themeSvc: ThemeService,
-    private _alertSvc: AlertService
+    private _alertSvc: AlertService,
+    private _store: Store<AppState>,
   ) { }
 
   ngOnInit() {
@@ -76,6 +80,7 @@ export class SettingComponent  implements OnInit {
   async logOut(){
     this.loading = true;
     try {
+      this._store.dispatch(logOut()); 
       await this._authSvc.logout();
       console.log('Cierre de sesión exitoso');
       this.loading = false;
