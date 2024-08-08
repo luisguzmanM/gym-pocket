@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, OnInit, Output, output } from '@angular
 import { User } from '../../models/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CameraService } from 'src/app/shared/services/camera.service';
+import { CountryService } from 'src/app/shared/services/country.service';
 
 @Component({
   selector: 'app-user-panel-update-info',
@@ -15,6 +16,8 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
   @Output() formValues: EventEmitter<any> = new EventEmitter<any>();
   @Input() loading : boolean = false;
   @Output() customerPhotoEmitter: EventEmitter<string> = new EventEmitter<string>();
+  countries: any[] = [];
+  selectedCountry!: string;
 
   formCtrl: FormGroup = new FormGroup({
     customerID: new FormControl(''),
@@ -35,11 +38,24 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
 
   constructor(
     private _cameraSvc: CameraService,
+    private _countrySvc: CountryService
   ) {}
 
   ngOnInit() {
     this.setInitialFormValues();
     this.checkIfThereAreChanges();
+    this.getCountries();
+  }
+
+  getCountries():void {
+    this._countrySvc.getCountries().subscribe((data: any[]) => {
+      this.countries = data.map(country => ({
+        name: country.name.common,
+        code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : ''),
+        flag: country.flags.svg
+      }));
+      this.countries.sort((a, b) => a.name.localeCompare(b.name));
+    });
   }
 
   setInitialFormValues():void {
