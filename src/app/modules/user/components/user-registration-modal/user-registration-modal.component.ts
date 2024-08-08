@@ -17,7 +17,7 @@ export class UserRegistrationModalComponent  implements OnInit {
   defaultPhotoURL: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   nextPaymentDate: string = this.getFormattedDate();
   countries: any[] = [];
-  selectedCountry!: string;
+  disableCountryInput: boolean = false;
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -45,6 +45,7 @@ export class UserRegistrationModalComponent  implements OnInit {
   }
 
   getCountries():void {
+    this.disableCountryInput = true;
     this._countrySvc.getCountries().subscribe((data: any[]) => {
       this.countries = data.map(country => ({
         name: country.name.common,
@@ -52,6 +53,7 @@ export class UserRegistrationModalComponent  implements OnInit {
         flag: country.flags.svg
       }));
       this.countries.sort((a, b) => a.name.localeCompare(b.name));
+      this.disableCountryInput = false;
     });
   }
 

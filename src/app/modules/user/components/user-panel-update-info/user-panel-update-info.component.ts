@@ -17,7 +17,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
   @Input() loading : boolean = false;
   @Output() customerPhotoEmitter: EventEmitter<string> = new EventEmitter<string>();
   countries: any[] = [];
-  selectedCountry!: string;
+  disableCountryInput: boolean = false;
 
   formCtrl: FormGroup = new FormGroup({
     customerID: new FormControl(''),
@@ -48,6 +48,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
   }
 
   getCountries():void {
+    this.disableCountryInput = true;
     this._countrySvc.getCountries().subscribe((data: any[]) => {
       this.countries = data.map(country => ({
         name: country.name.common,
@@ -55,6 +56,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
         flag: country.flags.svg
       }));
       this.countries.sort((a, b) => a.name.localeCompare(b.name));
+      this.disableCountryInput = false;
     });
   }
 

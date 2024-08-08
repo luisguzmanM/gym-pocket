@@ -57,9 +57,9 @@
       <ion-grid class="ion-no-padding">
         <ion-row>
           <ion-col class="ion-no-padding" size="12">
-            <ion-select interface="popover" label="Cod. país" label-placement="floating" fill="outline" formControlName="countryCode">
+            <ion-select interface="popover" label="Cod. país" label-placement="floating" fill="outline" formControlName="countryCode" [disabled]="disableCountryInput">
               <ion-select-option *ngFor="let country of countries" [value]="country.code">
-                <img [src]="country.flag" alt="{{country.name}}" width="20" height="15" style="margin-right: 8px; vertical-align: middle;" />
+                <img [src]="country.flag" alt="{{country.name}}"width="20" height="15" style="margin-right: 8px; vertical-align: middle; display: block;" />
                 {{ country.name }} {{ country.code }}
               </ion-select-option>
             </ion-select>
