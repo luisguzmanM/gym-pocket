@@ -10,6 +10,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { UserDetailComponent } from './views/user-detail/user-detail.component';
 import { UserPanelInfoComponent } from './components/user-panel-info/user-panel-info.component';
 import { UserPanelUpdateInfoComponent } from './components/user-panel-update-info/user-panel-update-info.component';
+import { CountryModalComponent } from 'src/app/shared/components/country-modal/country-modal.component';
 
 
 
@@ -28,7 +29,8 @@ import { UserPanelUpdateInfoComponent } from './components/user-panel-update-inf
     IonicModule,
     UserRoutingModule,
     HeaderComponent,
-    FormsModule
+    FormsModule,
+    CountryModalComponent
   ]
 })
 export class UserModule { }

@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Selecciona un país</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">Cerrar</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="filterCountries()" placeholder="Buscar por nombre o código" debounce="200"></ion-searchbar>
+</ion-header>
+
+<ion-content>
+  <div *ngIf="loading" class="d-flex ion-align-items-center ion-justify-content-center full-width full-height">
+    <ion-spinner></ion-spinner>
+  </div>
+
+  <ion-list *ngIf="!loading">
+    <!-- Utilizando *ngFor para iterar sobre filteredCountries -->
+    <ion-item *ngFor="let country of filteredCountries" (click)="selectCountry(country)">
+      <img 
+        [src]="country.flag" 
+        alt="{{ country.name }}" 
+        width="30" 
+        height="20"
+        style="margin-right: 12px; vertical-align: middle;"
+      />
+      {{ country.name }} ({{ country.code }})
+    </ion-item>
+  </ion-list>
+</ion-content>

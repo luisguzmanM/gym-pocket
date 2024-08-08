@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { CameraService } from 'src/app/shared/services/camera.service';
 import { UserService } from '../../services/user.service';
 import { CountryService } from 'src/app/shared/services/country.service';
+import { CountryModalComponent } from 'src/app/shared/components/country-modal/country-modal.component';
 
 @Component({
   selector: 'app-user-registration-modal',
@@ -16,8 +17,6 @@ export class UserRegistrationModalComponent  implements OnInit {
   customerPhoto: any = {};
   defaultPhotoURL: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
   nextPaymentDate: string = this.getFormattedDate();
-  countries: any[] = [];
-  disableCountryInput: boolean = false;
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -34,27 +33,12 @@ export class UserRegistrationModalComponent  implements OnInit {
   constructor(
     private _modalCtrl: ModalController,
     private _cameraSvc: CameraService,
-    private _userSvc: UserService,
-    private _countrySvc: CountryService
+    private _userSvc: UserService
   ) { }
 
   ngOnInit() {
     this.capitalizeFormControl('firstName');
     this.capitalizeFormControl('lastName');
-    this.getCountries();
-  }
-
-  getCountries():void {
-    this.disableCountryInput = true;
-    this._countrySvc.getCountries().subscribe((data: any[]) => {
-      this.countries = data.map(country => ({
-        name: country.name.common,
-        code: country.idd.root + (country.idd.suffixes ? country.idd.suffixes[0] : ''),
-        flag: country.flags.svg
-      }));
-      this.countries.sort((a, b) => a.name.localeCompare(b.name));
-      this.disableCountryInput = false;
-    });
   }
 
   closeModal(): void {
@@ -138,5 +122,16 @@ export class UserRegistrationModalComponent  implements OnInit {
     return `${year}-${month}-${day}`;
   }
   
+  async openCountriesModal() {
+    const modal = await this._modalCtrl.create({
+      component: CountryModalComponent,
+    });
+
+    modal.present();
+
+    modal.onDidDismiss().then(country => {
+      console.log(country)
+    })
+  }
 
 }
