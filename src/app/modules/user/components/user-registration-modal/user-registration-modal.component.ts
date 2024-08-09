@@ -130,7 +130,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     modal.present();
 
     modal.onDidDismiss().then(country => {
-      console.log(country)
+      this.formCtrl.controls['countryCode'].setValue(country.data.code);
     })
   }
 

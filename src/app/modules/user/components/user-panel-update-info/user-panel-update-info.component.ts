@@ -3,6 +3,8 @@ import { User } from '../../models/user.model';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { CameraService } from 'src/app/shared/services/camera.service';
 import { CountryService } from 'src/app/shared/services/country.service';
+import { CountryModalComponent } from 'src/app/shared/components/country-modal/country-modal.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-user-panel-update-info',
@@ -38,7 +40,8 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
 
   constructor(
     private _cameraSvc: CameraService,
-    private _countrySvc: CountryService
+    private _countrySvc: CountryService,
+    private _modalCtrl: ModalController,
   ) {}
 
   ngOnInit() {
@@ -92,6 +95,18 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     } catch (error) {
       console.log('Error ', error)
     }
+  }
+
+  async openCountriesModal() {
+    const modal = await this._modalCtrl.create({
+      component: CountryModalComponent,
+    });
+
+    modal.present();
+
+    modal.onDidDismiss().then(country => {
+      this.formCtrl.controls['countryCode'].setValue(country.data.code);
+    })
   }
 
 }

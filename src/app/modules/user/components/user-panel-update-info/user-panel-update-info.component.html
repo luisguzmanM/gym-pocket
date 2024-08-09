@@ -52,32 +52,11 @@
     </ion-grid>
     <br>
 
-    <ion-grid class="ion-no-padding">
-      <ion-row>
-        <ion-col class="ion-no-padding" size="12">
-          <ion-select interface="popover" label="Cod. país" label-placement="floating" fill="outline" formControlName="countryCode" [disabled]="disableCountryInput">
-            <ion-select-option *ngFor="let country of countries" [value]="country.code">
-              <div>
-                <img [src]="country.flag" alt="{{country.name}}" width="20" height="15" style="margin-right: 8px; vertical-align: middle;" />
-                {{ country.code }} ({{ country.name }})
-              </div>
-              <img [src]="country.flag" alt="{{country.name}}" width="20" height="15" style="margin-right: 8px; vertical-align: middle;" />
-              {{ country.name }} {{ country.code }}
-            </ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-    <br>      
-
-    <ion-grid class="ion-no-padding">
-      <ion-row>
-        <ion-col class="ion-no-padding" size="12">
-          <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+    <ion-input type="text" label="Codigo país" label-placement="floating" fill="outline" formControlName="countryCode" (click)="openCountriesModal()"></ion-input>
     <br>
+
+    <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
+    <br>     
     
     <ion-input type="date" label="Próxima fecha de pago" label-placement="floating" fill="outline"  formControlName="nextPaymentDate"></ion-input>
   </form>
