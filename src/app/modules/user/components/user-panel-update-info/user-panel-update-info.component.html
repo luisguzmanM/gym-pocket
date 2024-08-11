@@ -3,7 +3,7 @@
 }
 
 @if(!loading){
-  <div class="d-flex ion-justify-content-center ion-margin-bottom ion-margin-top">
+  <div class="d-flex ion-ju ify-content-center ion-margin-bottom ion-margin-top">
     <div class="p-relative">
       <ion-avatar>
         <img [src]="formCtrl.controls['photoURL'].value"/>
@@ -58,6 +58,6 @@
     <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
     <br>     
     
-    <ion-input type="date" label="Próxima fecha de pago" label-placement="floating" fill="outline"  formControlName="nextPaymentDate"></ion-input>
+    <ion-input type="date" label="Próxima fecha de pago" label-placement="floating" fill="outline"  formControlName="membershipExpiryDate"></ion-input>
   </form>
 }

@@ -150,8 +150,7 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
 
   openChatWithNumber(phoneNumber: string) {
     const { notificationMessage } = this.user;
-    const message: string = notificationMessage;
-    console.log(message)
+    const message: string = notificationMessage;    
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_system');
   }
 
@@ -175,8 +174,10 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
         this.formCtrl.controls['photoURL'].setValue(photoURL);
       }
 
-      await this._userSvc.updateAffiliate(this.formCtrl.value);
-      this._store.dispatch(updateAffiliateData({ user: this.formCtrl.value }));
+      const payload = this.prepareCustomerInfoToSend();
+
+      await this._userSvc.updateAffiliate(payload);
+      this._store.dispatch(updateAffiliateData({ user: payload }));
     
       this.loading = false;
       this.enableSaveButton = false;
@@ -244,7 +245,7 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
       membership: {
         type: this.formCtrl.controls['membershipType'].value,
         startDate: this.data.membership.startDate,
-        expiryDate: this.setNextPaymentDate(),
+        expiryDate: this.formCtrl.controls['membershipExpiryDate'].value,
         status: this.formCtrl.controls['membershipStatus'].value
       },
       photoURL: this.formCtrl.controls['photoURL'].value
