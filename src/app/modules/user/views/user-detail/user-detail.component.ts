@@ -39,10 +39,11 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
     dateOfBirth: new FormControl('', [Validators.required]),
     typeDocIdentity: new FormControl('', Validators.required),
     docNumber: new FormControl('', Validators.required),
-    nextPaymentDate: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
-    isPaymentDue: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
+    membershipStatus: new FormControl('', Validators.required),
+    membershipType: new FormControl('', Validators.required),
+    membershipExpiryDate: new FormControl('', Validators.required),
     photoURL: new FormControl('', [Validators.required])
   });
 
@@ -67,6 +68,20 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this._adMobSvc.hideAdsBanner();
+  }
+
+  setInitialUserData() {
+    this.formCtrl.controls['firstName'].setValue(this.data.firstName);
+    this.formCtrl.controls['lastName'].setValue(this.data.lastName);
+    this.formCtrl.controls['dateOfBirth'].setValue(this.data.dateOfBirth);
+    this.formCtrl.controls['typeDocIdentity'].setValue(this.data.typeDocIdentity);
+    this.formCtrl.controls['docNumber'].setValue(this.data.docNumber);
+    this.formCtrl.controls['countryCode'].setValue(this.data.countryCode);
+    this.formCtrl.controls['phoneNumber'].setValue(this.data.phoneNumber);
+    this.formCtrl.controls['membershipStatus'].setValue(this.data.membership.status);
+    this.formCtrl.controls['membershipExpiryDate'].setValue(this.data.membership.expiryDate);
+    this.formCtrl.controls['membershipType'].setValue(this.data.membership.type);
+    this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
   }
 
   closeUserDetail(): void {
@@ -140,19 +155,6 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, '_system');
   }
 
-  setInitialUserData() {
-    this.formCtrl.controls['firstName'].setValue(this.data.firstName);
-    this.formCtrl.controls['lastName'].setValue(this.data.lastName);
-    this.formCtrl.controls['dateOfBirth'].setValue(this.data.dateOfBirth);
-    this.formCtrl.controls['typeDocIdentity'].setValue(this.data.typeDocIdentity);
-    this.formCtrl.controls['docNumber'].setValue(this.data.docNumber);
-    this.formCtrl.controls['phoneNumber'].setValue(this.data.phoneNumber);
-    this.formCtrl.controls['countryCode'].setValue(this.data.countryCode);
-    this.formCtrl.controls['isPaymentDue'].setValue(this.data.isPaymentDue);
-    this.formCtrl.controls['nextPaymentDate'].setValue(this.data.nextPaymentDate);
-    this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
-  }
-
   areThereChangesInUpdateForm(event: boolean):void {
     event ? this.enableSaveButton = true : this.enableSaveButton = false;
   }
@@ -165,15 +167,15 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
   async updateUserDetails(): Promise<void> {
     this.loading = true;
     try {
+
       if(this.previousPhotoURL !== this.formCtrl.controls['photoURL'].value){
         this.formCtrl.controls['photoURL'].setValue(this.customerPhotoDataUpdate);
         const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('customerPhoto' ,this.formCtrl.controls['photoURL'].value);
         const photoURL = await photoUploaded.ref.getDownloadURL();
         this.formCtrl.controls['photoURL'].setValue(photoURL);
       }
-      await this._userSvc.updateAffiliate(this.formCtrl.value);
 
-      // Despacha la acción para actualizar el store
+      await this._userSvc.updateAffiliate(this.formCtrl.value);
       this._store.dispatch(updateAffiliateData({ user: this.formCtrl.value }));
     
       this.loading = false;
@@ -211,32 +213,67 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
   }
 
   async changeMembershipState(event:string){
-    const isPaymentDue = event === 'overdue' ? true : false;
-
     this.setInitialUserData();
-    this.formCtrl.addControl('customerID', new FormControl(this.data.customerID));
-    this.formCtrl.controls['isPaymentDue'].setValue(isPaymentDue);
+    const nextPaymentDate = this.setNextPaymentDate();
 
-    let nextPaymentDate: Date;
-    if (!isPaymentDue) {
-      // Si el pago está al día, sumar un mes a la fecha actual
-      nextPaymentDate = new Date();
-      nextPaymentDate.setMonth(nextPaymentDate.getMonth() + 1);
-    } else {
-      // Si el pago está atrasado, restar un mes a la fecha de pago actual
-      nextPaymentDate = new Date(this.data.nextPaymentDate);
-      nextPaymentDate.setMonth(nextPaymentDate.getMonth() - 1);
-    }
-  
-    this.formCtrl.controls['nextPaymentDate'].setValue(nextPaymentDate.toISOString().split('T')[0]);
+    this.formCtrl.addControl('customerID', new FormControl(this.data.customerID));
+    this.formCtrl.controls['membershipStatus'].setValue(event);
+    this.formCtrl.controls['membershipExpiryDate'].setValue(nextPaymentDate);
+
+    const payload = this.prepareCustomerInfoToSend();
 
     try {
-      await this._userSvc.updateAffiliate(this.formCtrl.value);
-      this._store.dispatch(updateAffiliateData({ user: this.formCtrl.value }));
+      await this._userSvc.updateAffiliate(payload);
+      this._store.dispatch(updateAffiliateData({ user: payload }));
     } catch (error) {
       console.error('❌ Error al actualizar el usuario:', error);
       this._toastSvc.show('Error al cambiar estado de pago');
     }
+  }
+
+  prepareCustomerInfoToSend() {
+    const payload:User = {
+      customerID: this.formCtrl.controls['customerID'].value,
+      firstName: this.formCtrl.controls['firstName'].value,
+      lastName: this.formCtrl.controls['lastName'].value,
+      dateOfBirth: this.formCtrl.controls['dateOfBirth'].value,
+      typeDocIdentity: this.formCtrl.controls['typeDocIdentity'].value,
+      docNumber: this.formCtrl.controls['docNumber'].value,
+      countryCode: this.formCtrl.controls['countryCode'].value,
+      phoneNumber: this.formCtrl.controls['phoneNumber'].value,
+      membership: {
+        type: this.formCtrl.controls['membershipType'].value,
+        startDate: this.data.membership.startDate,
+        expiryDate: this.setNextPaymentDate(),
+        status: this.formCtrl.controls['membershipStatus'].value
+      },
+      photoURL: this.formCtrl.controls['photoURL'].value
+    }
+    return payload;
+  }
+
+  setNextPaymentDate():string {
+    const today = new Date();
+    let nextPaymentMonth = 0;
+
+    if (this.data.membership.type === 'M') {
+      nextPaymentMonth = 1;
+    } else if (this.data.membership.type === 'Q') {
+      nextPaymentMonth = 3;
+    } else if (this.data.membership.type === 'S') {
+      nextPaymentMonth = 6;
+    } else {
+      nextPaymentMonth = 12;
+    }
+
+    const nextPaymentDate = new Date(today);
+    nextPaymentDate.setMonth(today.getMonth() + nextPaymentMonth);
+
+    const year = nextPaymentDate.getFullYear();
+    const month = ('0' + (nextPaymentDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + nextPaymentDate.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
   }
 
 }

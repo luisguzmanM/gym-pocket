@@ -3,8 +3,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ModalController } from '@ionic/angular';
 import { CameraService } from 'src/app/shared/services/camera.service';
 import { UserService } from '../../services/user.service';
-import { CountryService } from 'src/app/shared/services/country.service';
 import { CountryModalComponent } from 'src/app/shared/components/country-modal/country-modal.component';
+import { MembershipType, User } from '../../models/user.model';
 
 @Component({
   selector: 'app-user-registration-modal',
@@ -16,7 +16,29 @@ export class UserRegistrationModalComponent  implements OnInit {
   loading: boolean = false;
   customerPhoto: any = {};
   defaultPhotoURL: string = 'https://ionicframework.com/docs/img/demos/avatar.svg';
-  nextPaymentDate: string = this.getFormattedDate();
+
+  membershipTypes:MembershipType[] = [
+    {
+      type: 'O',
+      description: 'Ocasional',
+    },
+    {
+      type: 'M',
+      description: 'Mensual',
+    },
+    {
+      type: 'Q',
+      description: 'Trimestral',
+    },
+    {
+      type: 'S',
+      description: 'Semestral',
+    },
+    {
+      type: 'A',
+      description: 'Anual',
+    },
+  ];
 
   formCtrl: FormGroup = new FormGroup({
     firstName: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(30)]),
@@ -26,7 +48,7 @@ export class UserRegistrationModalComponent  implements OnInit {
     docNumber: new FormControl('', Validators.required),
     countryCode: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
-    nextPaymentDate: new FormControl(this.nextPaymentDate, Validators.required),
+    membershipType: new FormControl('', Validators.required),
     photoURL: new FormControl('')
   });
 
@@ -68,18 +90,22 @@ export class UserRegistrationModalComponent  implements OnInit {
   }
 
   prepareCustomerInfoToSend() {
-    const payload = {
+    const payload:User = {
       customerID: '',
       firstName: this.formCtrl.controls['firstName'].value,
       lastName: this.formCtrl.controls['lastName'].value,
       dateOfBirth: this.formCtrl.controls['dateOfBirth'].value,
       typeDocIdentity: this.formCtrl.controls['typeDocIdentity'].value,
       docNumber: this.formCtrl.controls['docNumber'].value,
-      nextPaymentDate: this.formCtrl.controls['nextPaymentDate'].value,
       countryCode: this.formCtrl.controls['countryCode'].value,
       phoneNumber: this.formCtrl.controls['phoneNumber'].value,
-      photoURL: this.formCtrl.controls['photoURL'].value,
-      isPaymentDue: false,
+      membership: {
+        type: this.formCtrl.controls['membershipType'].value,
+        startDate: this.setStartDate(),
+        expiryDate: this.setNextPaymentDate(),
+        status: 'Active'
+      },
+      photoURL: this.formCtrl.controls['photoURL'].value
     }
     return payload;
   }
@@ -87,6 +113,7 @@ export class UserRegistrationModalComponent  implements OnInit {
   async saveCustomerInfo() {
     this.loading = true;
     try {
+
       if(this.formCtrl.controls['photoURL'].value !== ''){
         const photoUploaded = await this._cameraSvc.uploadPhotoToCloudStorage('customerPhoto', this.customerPhoto);
         const photoURL = await photoUploaded.ref.getDownloadURL();
@@ -94,12 +121,14 @@ export class UserRegistrationModalComponent  implements OnInit {
       } else {
         this.formCtrl.controls['photoURL'].setValue(this.defaultPhotoURL);
       }
+
       const payload = this.prepareCustomerInfoToSend();
       const customer = await this._userSvc.createAffiliate(payload);
+      
       const customerObject = customer.data();
-      if(customerObject){
-        customerObject['customerID'] = customer.id;
-      }
+      console.log('customerID -> ', customerObject);
+      if(customerObject) customerObject['customerID'] = customer.id;
+
       this.loading = false;
       this._modalCtrl.dismiss(customerObject);
     } catch (error) {
@@ -107,18 +136,37 @@ export class UserRegistrationModalComponent  implements OnInit {
     }
   }
 
-  private getFormattedDate(): string {
+  setNextPaymentDate(): string {
     const today = new Date();
-    const nextMonth = new Date(today.getFullYear(), today.getMonth() + 1, today.getDate());
-  
-    if (nextMonth.getDate() !== today.getDate()) {
-      nextMonth.setDate(0);
+    let nextPaymentMonth = 0;
+
+    if (this.formCtrl.controls['membershipType'].value === 'M') {
+      nextPaymentMonth = 1;
+    } else if (this.formCtrl.controls['membershipType'].value === 'Q') {
+      nextPaymentMonth = 3;
+    } else if (this.formCtrl.controls['membershipType'].value === 'S') {
+      nextPaymentMonth = 6;
+    } else {
+      nextPaymentMonth = 12;
     }
-  
-    const year = nextMonth.getFullYear();
-    const month = ('0' + (nextMonth.getMonth() + 1)).slice(-2);
-    const day = ('0' + nextMonth.getDate()).slice(-2);
-  
+
+    const nextPaymentDate = new Date(today);
+    nextPaymentDate.setMonth(today.getMonth() + nextPaymentMonth);
+
+    const year = nextPaymentDate.getFullYear();
+    const month = ('0' + (nextPaymentDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + nextPaymentDate.getDate()).slice(-2);
+
+    return `${year}-${month}-${day}`;
+  }
+
+  setStartDate():string {
+    const today = new Date;
+    const startDate = new Date(today);
+
+    const year = startDate.getFullYear();
+    const month = ('0' + (startDate.getMonth() + 1)).slice(-2);
+    const day = ('0' + startDate.getDate()).slice(-2);
     return `${year}-${month}-${day}`;
   }
   
@@ -132,6 +180,10 @@ export class UserRegistrationModalComponent  implements OnInit {
     modal.onDidDismiss().then(country => {
       this.formCtrl.controls['countryCode'].setValue(country.data.code);
     })
+  }
+
+  selectMembershipType(event:any){
+    this.formCtrl.controls['membershipType'].setValue(event.target.value);
   }
 
 }

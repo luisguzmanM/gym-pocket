@@ -10,23 +10,19 @@ export class UserPanelInfoComponent  implements OnInit {
 
   @Input() data!: User;
   @Output() membershipStateEmitter: EventEmitter<string> = new EventEmitter<string>();
-  isPaymentDue: boolean = false;
+  membershipStatus:string = '';
 
   constructor() { }
 
   ngOnInit(): void {
-    if(this.data){
-      this.isPaymentDue = this.data.isPaymentDue
-    }
+    this.membershipStatus = this.data.membership.status;
   }
 
   onRadioChange(event:any){
-    if(event.target.value === 'overdue') this.isPaymentDue = true;
-    if(event.target.value === 'paid') this.isPaymentDue = false;
     this.membershipStateEmitter.emit(event.target.value);
+    this.membershipStatus = event.target.value;
   }
 
-  // Método para convertir fecha de YYYY-MM-DD a DD-MM-YYYY
   getFormattedDisplayDate(date: string): string {
     const [year, month, day] = date.split('-');
     return `${day}-${month}-${year}`;

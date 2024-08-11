@@ -32,7 +32,7 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     countryCode: new FormControl('', Validators.required),
     phoneNumber: new FormControl('', Validators.required),
     photoURL: new FormControl('', [Validators.required]),
-    isPaymentDue: new FormControl('')
+    // isPaymentDue: new FormControl('')
   });
 
   customerPhoto: any = null;
@@ -71,9 +71,9 @@ export class UserPanelUpdateInfoComponent  implements OnInit {
     this.formCtrl.controls['docNumber'].setValue(this.data.docNumber);
     this.formCtrl.controls['countryCode'].setValue(this.data.countryCode);
     this.formCtrl.controls['phoneNumber'].setValue(this.data.phoneNumber);
-    this.formCtrl.controls['nextPaymentDate'].setValue(this.data.nextPaymentDate);
+    // this.formCtrl.controls['nextPaymentDate'].setValue(this.data.nextPaymentDate);
     this.formCtrl.controls['photoURL'].setValue(this.data.photoURL);
-    this.formCtrl.controls['isPaymentDue'].setValue(this.data.isPaymentDue);
+    // this.formCtrl.controls['isPaymentDue'].setValue(this.data.isPaymentDue);
 
     if('customerID' in this.data){
       this.formCtrl.controls['customerID'].setValue(this.data.customerID);

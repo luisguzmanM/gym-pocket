@@ -1,9 +1,9 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/state/app.state';
 import { selectLoading, selectUsers } from 'src/app/state/selectors/user.selectors';
 import { UserService } from '../../services/user.service';
-import { addUser, loadUserList, loadUserListSuccess, removeUser } from 'src/app/state/actions/user.actions';
+import { addUser, loadUserList, loadUserListSuccess, removeUser, updateAffiliateData } from 'src/app/state/actions/user.actions';
 import { User } from '../../models/user.model';
 import { Observable } from 'rxjs';
 import { ModalController } from '@ionic/angular';
@@ -21,13 +21,14 @@ import { ConnectionService } from 'src/app/shared/services/connection.service';
   templateUrl: './user-list.component.html',
   styleUrls: ['./user-list.component.scss'],
 })
-export class UserListComponent  implements OnInit {
+
+export class UserListComponent implements OnInit {
 
   userList$: Observable<User[]> = this._store.select((selectUsers));
   loading$: Observable<boolean> = this._store.select((selectLoading));
   loading: boolean = false;
   lastAddedUserID: string | null = null;
-  isConnected:boolean = true;
+  isConnected: boolean = true;
 
   constructor(
     private _store: Store<AppState>,
@@ -63,10 +64,9 @@ export class UserListComponent  implements OnInit {
     this.loading = true;
     try {
       this._store.dispatch(loadUserList());
-      const userList = await this._userSvc.getAffiliateList(); // Get clients from database.
-      console.log(userList)
-      this.checkPaymentDay(userList); 
-      this._store.dispatch(loadUserListSuccess({users: userList})); // Save clients inside store.
+      const userList = await this._userSvc.getAffiliateList();
+      this.checkPaymentDay(userList);
+      this._store.dispatch(loadUserListSuccess({ users: userList }));
       this.loading = false;
     } catch (error) {
       this.isConnected = false;
@@ -82,7 +82,7 @@ export class UserListComponent  implements OnInit {
     modal.present();
 
     modal.onDidDismiss().then(customer => {
-      if(!customer.data) return;
+      if (!customer.data) return;
       this._store.dispatch(addUser({ user: customer.data }));
       this.lastAddedUserID = customer.data.customerID;
       setTimeout(() => {
@@ -95,19 +95,18 @@ export class UserListComponent  implements OnInit {
     return this.lastAddedUserID === userId;
   }
 
-  async openAffiliateDetail(info:User) {
-
+  async openAffiliateDetail(info: User) {
     const modal = await this._modalCtrl.create({
       component: UserDetailComponent,
       componentProps: {
         data: info
       }
     });
-    
+
     modal.present();
 
     modal.onDidDismiss().then(customer => {
-      if(!customer.data) return;
+      if (!customer.data) return;
       this.lastAddedUserID = customer.data;
       setTimeout(() => {
         this.lastAddedUserID = null;
@@ -118,17 +117,28 @@ export class UserListComponent  implements OnInit {
 
   checkPaymentDay(userList: any) {
     const currentDate = new Date();
-    const currentDay = currentDate.getDate();
+    const currentDateString = currentDate.toISOString().split('T')[0];
+    let membershipStatus = 'Active';
   
-    userList.forEach((user: any) => {
-      const nextPaymentDate = new Date(user.nextPaymentDate);
+    userList.forEach( async (user: any) => {
+      const currentMembershipStatus = user.membership.status;
 
-      if (currentDay >= nextPaymentDate.getDate() && currentDate >= nextPaymentDate) {
-        user.isPaymentDue = true;
-      } else {
-        user.isPaymentDue = false;
+      const expirationDate = new Date(user.membership.expiryDate);
+      const expirationDateString = expirationDate.toISOString().split('T')[0];
+
+      if (currentDateString >= expirationDateString || user.membership.status === 'Pending') {
+        membershipStatus = 'Pending'
+      };
+
+      user.membership.status = membershipStatus;
+
+      if(currentMembershipStatus === 'Active' && membershipStatus === 'Pending') {
+        await this._userSvc.updateAffiliate(user);
+        this._store.dispatch(updateAffiliateData({ user:user }));
       }
+
     });
   }
+
 
 }

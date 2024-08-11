@@ -7,5 +7,5 @@
     <p>{{ user.lastName }}</p>
   </span>
   <span class="separator"></span>
-  <span class="status" [ngClass]="user.isPaymentDue ? 'overdue' : 'paid'"></span>
+  <span class="status" [ngClass]="user.membership?.status === 'Pending' ? 'overdue' : 'paid'"></span>
 </ion-item>

@@ -58,10 +58,14 @@
       <br>
 
       <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
-      <br>     
+      <br> 
       
-      <ion-input type="date" label="Próxima fecha de Pago" label-placement="floating" fill="outline"  formControlName="nextPaymentDate" [value]="nextPaymentDate"></ion-input>
-      <br>
+      <ion-title class="ion-no-padding">Membresía</ion-title>
+      <ion-radio-group (ionChange)="selectMembershipType($event)">
+        @for(membership of membershipTypes; track membership.type){
+          <ion-radio [value]="membership.type">{{ membership.description }}</ion-radio>
+        }
+      </ion-radio-group>
   
       <div class="d-flex ion-justify-content-between ion-align-items-center">
         @if (!formCtrl.value.photoURL) {
