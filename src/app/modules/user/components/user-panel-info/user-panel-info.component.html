@@ -13,7 +13,7 @@
 
 <ion-card>
   <ion-card-header>
-    <ion-card-title class="ion-padding-start ion-padding-top">Datos</ion-card-title>
+    <ion-card-title class="ion-padding-start ion-padding-top">Datos personales</ion-card-title>
   </ion-card-header>
 
   <ion-card-content>
@@ -55,10 +55,6 @@
       <ion-item lines="none">
         <ion-label>Nro. teléfono: {{ data.countryCode }} {{ data.phoneNumber }}</ion-label>
       </ion-item>
-
-      <ion-item lines="none">
-        <ion-label>Próx. pago: {{ getFormattedDisplayDate(data.membership.expiryDate) }}</ion-label>
-      </ion-item>
     </ion-list>
   </ion-card-content>
 </ion-card>
@@ -80,13 +76,24 @@
   </ion-popover>
 
   <ion-card-content>
+
+    <ion-list>
+      <ion-item lines="none">
+        <ion-label>Tipo de membresía: {{ getMembershipType() }}</ion-label>
+      </ion-item>
+
+      <ion-item lines="none">
+        <ion-label>Próxima fecha de pago: {{ getFormattedDisplayDate(data.membership.expiryDate) }}</ion-label>
+      </ion-item>
+    </ion-list>
+
     <ion-radio-group (ionChange)="onRadioChange($event)" [value]="data.membership.status">
-      <div class="d-flex ion-justify-content-between ion-margin-bottom">
+      <div class="d-flex ion-justify-content-between ion-margin-bottom ion-padding-start ion-padding-end">
         <ion-label>Al día</ion-label>
         <ion-radio slot="start" value="Active" justify="space-between" color="success"></ion-radio>
       </div>
 
-      <div class="d-flex ion-justify-content-between ion-margin-bottom">
+      <div class="d-flex ion-justify-content-between ion-margin-bottom ion-padding-start ion-padding-end">
         <ion-label>Con deuda</ion-label>
         <ion-radio slot="start" value="Pending" justify="space-between" color="danger"></ion-radio>
       </div>

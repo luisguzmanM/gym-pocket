@@ -28,4 +28,17 @@ export class UserPanelInfoComponent  implements OnInit {
     return `${day}-${month}-${year}`;
   }
 
+  getMembershipType():string {
+    const type = this.data.membership.type;
+    let membershipType = '';
+
+    if(type === 'O') membershipType = 'Ocasional';
+    if(type === 'M') membershipType = 'Mensual';
+    if(type === 'Q') membershipType = 'Trimestral';
+    if(type === 'S') membershipType = 'Semestral';
+    if(type === 'A') membershipType = 'Anual';
+
+    return membershipType;
+  }
+
 }
