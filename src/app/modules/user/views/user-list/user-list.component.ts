@@ -105,12 +105,17 @@ export class UserListComponent implements OnInit {
 
     modal.present();
 
-    modal.onDidDismiss().then(customer => {
-      if (!customer.data) return;
-      this.lastAddedUserID = customer.data;
+    modal.onDidDismiss().then(customer => {      
+      const { data, role } = customer;
+
+      if (!data) return;
+
+      this.lastAddedUserID = data;
       setTimeout(() => {
         this.lastAddedUserID = null;
-        this._store.dispatch(removeUser({ userId: customer.data }));
+        if(role === 'delete') {
+          this._store.dispatch(removeUser({ userId: customer.data }));
+        }
       }, 3000)
     })
   }

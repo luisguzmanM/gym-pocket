@@ -132,7 +132,7 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
         const {customerID} = this.data;
         try {
           await this._userSvc.deleteAffiliate(customerID);
-          this._modalCtrl.dismiss(customerID);
+          this._modalCtrl.dismiss(customerID, 'delete');
           this.loading = false;
         } catch (error) {
           this._toastSvc.show('❌ Error al eliminar al cliente');
@@ -181,7 +181,7 @@ export class UserDetailComponent  implements OnInit, OnDestroy {
     
       this.loading = false;
       this.enableSaveButton = false;
-      this.closeUserDetail();
+      this._modalCtrl.dismiss(payload.customerID, 'update');
     } catch (error) {
       console.error('❌ Error al actualizar el usuario:', error);
       this.loading = false;
