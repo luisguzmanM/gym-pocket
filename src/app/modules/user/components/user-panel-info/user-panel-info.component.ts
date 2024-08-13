@@ -34,9 +34,9 @@ export class UserPanelInfoComponent  implements OnInit {
 
     if(type === 'O') membershipType = 'Ocasional';
     if(type === 'M') membershipType = 'Mensual';
-    if(type === 'Q') membershipType = 'Trimestral';
-    if(type === 'S') membershipType = 'Semestral';
-    if(type === 'A') membershipType = 'Anual';
+    if(type === 'Q') membershipType = '3 Meses';
+    if(type === 'S') membershipType = '6 Meses';
+    if(type === 'A') membershipType = '12 Meses';
 
     return membershipType;
   }
