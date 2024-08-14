@@ -31,7 +31,7 @@ export class PasswordComponent  implements OnInit {
       await this._authSvc.updatePassword(email);
       this.loading = false;
       this.goToLoginView();
-      this._toastSvc.show('Email enviado. Revisa tu bandeja de entrada ✅');
+      this._toastSvc.show('Si tienes una cuenta de Gym Pocket, te llegará un email con un enlace para restablecer tu contraseña');
     } catch (error) {
       this._toastSvc.show('❌ No existe una cuenta con este correo o no has verificado aún tu cuenta');
     }

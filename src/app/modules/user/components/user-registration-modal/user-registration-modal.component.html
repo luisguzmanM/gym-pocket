@@ -54,11 +54,17 @@
       </ion-grid>
       <br>
 
-      <ion-input type="text" label="Codigo país" label-placement="floating" fill="outline" formControlName="countryCode" (click)="openCountriesModal()"></ion-input>
+      <ion-grid class="ion-no-padding">
+        <ion-row class="ion-justify-content-between gap-10">
+          <ion-col class="ion-no-padding" size="4">
+            <ion-input type="text" label="Codigo país" label-placement="floating" fill="outline" formControlName="countryCode" (click)="openCountriesModal()"></ion-input>
+          </ion-col>
+          <ion-col class="ion-no-padding">
+            <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
       <br>
-
-      <ion-input type="tel" label="Teléfono" label-placement="floating" fill="outline" formControlName="phoneNumber"></ion-input>
-      <br> 
       
       <ion-title class="ion-no-padding">Membresía</ion-title>
       <ion-radio-group (ionChange)="selectMembershipType($event)">
@@ -69,7 +75,7 @@
   
       <div class="d-flex ion-justify-content-between ion-align-items-center">
         @if (!formCtrl.value.photoURL) {
-          <p>Cargar foto</p>
+          <p>Cargar foto (Opcional)</p>
         }
         @if(formCtrl.value.photoURL){
           <ion-avatar>
