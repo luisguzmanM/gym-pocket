@@ -125,6 +125,7 @@ export class SettingComponent  implements OnInit {
     this.loading = true;
 
     try {
+      await this._authSvc.deleteAllAffiliates();
       await this._authSvc.deleteCollection(this.userID);
       await this._authSvc.deleteUser();      
       this._routerSvc.navigate(['/auth/login'])
@@ -142,7 +143,7 @@ export class SettingComponent  implements OnInit {
       await this._authSvc.updateUser(this.user);
       this.loading = false;
       this.settingNotificationMessage = false;
-      this._toastSvc.show('Actualización exitosa ✅');
+      this._toastSvc.show('✅ Actualización exitosa');
     } catch (error) {
       this._toastSvc.show('❌ Error al guardar mensaje de notificación');
     }
@@ -154,7 +155,7 @@ export class SettingComponent  implements OnInit {
       await this._authSvc.updateUser(this.user);
       this.settingBusinessName = false;
       this.loading = false;
-      this._toastSvc.show('Actualización exitosa ✅');
+      this._toastSvc.show('✅ Actualización exitosa');
       this.showBlinkInBusinessName = true;
       setTimeout(() => {
         this.showBlinkInBusinessName = false;
@@ -209,7 +210,7 @@ export class SettingComponent  implements OnInit {
       await this._authSvc.updateUser(this.user);
 
       this.loading = false;
-      this._toastSvc.show('✅ Logo actualizado con éxito');
+      this._toastSvc.show('✅ Actualización exitosa');
     } catch (error) {
       this._toastSvc.show('❌ Error al actualizar logo');
       console.error(error);

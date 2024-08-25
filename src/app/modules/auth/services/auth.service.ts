@@ -4,7 +4,7 @@ import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { initializeApp } from 'firebase/app';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
-import { doc, getFirestore, updateDoc } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc } from 'firebase/firestore';
 import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, User, sendPasswordResetEmail } from "firebase/auth";
 
 
@@ -33,7 +33,6 @@ export class AuthService {
           ownerId: user.uid,
           logoURL: 'https://ionicframework.com/docs/img/demos/avatar.svg',
           businessName: businessName,
-          password: password,
           notificationMessage: `Estimado usuario, ${businessName} te recuerda ponerte al día con tu mensualidad`,
           storageRef: ''
         });
@@ -83,7 +82,7 @@ export class AuthService {
 
   async deleteCollection(uid:string){
     try {
-      await this.afs.collection('gym').doc(uid).delete();
+      await this.afs.collection('gym').doc(uid).delete();      
     } catch (error) {
       throw new Error ('Error al borrar la colección del gimnasio');
     }
@@ -117,6 +116,22 @@ export class AuthService {
         const errorMessage = error.message;
         console.log('❌', errorCode, '📩', errorMessage)
       });
+  }
+
+  async deleteAllAffiliates() {
+    const user = await this.afAuth.currentUser;
+    
+    if (user) {
+      const gymID = user.uid;
+      const clientsQuery = query(collection(this.db, `gym/${gymID}/affiliate`));
+      const querySnapshot = await getDocs(clientsQuery);
+
+      querySnapshot.forEach(async (doc) => {
+        await deleteDoc(doc.ref);
+      });
+    } else {
+      throw new Error('Error al intentar borrar a los clientes');
+    }
   }
 
 }

@@ -44,7 +44,7 @@ export class LoginComponent  implements OnInit {
       }
 
     } catch (error) {
-      this._toastSvc.show('❌ No existe una cuenta con este correo o la contraseña no es la correcta');
+      this._toastSvc.show('❌ No existe una cuenta a este correo o la contraseña no es correcta');
     }
 
   }
