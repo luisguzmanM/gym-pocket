@@ -1,5 +1,5 @@
 {
-  "name": "gym-pucket",
+  "name": "gym-pocket",
   "version": "1.0.0",
   "author": "Luis Guzmán",
   "homepage": "",
@@ -70,5 +70,5 @@
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.2.2"
   },
-  "description": "An Ionic project"
+  "description": "An application for gym owners to manage their users"
 }
