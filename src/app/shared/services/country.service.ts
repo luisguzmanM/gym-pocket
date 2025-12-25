@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class CountryService {
 
-  private apiUrl = 'https://restcountries.com/v3.1/all';
+  private apiUrl = 'https://restcountries.com/v3.1/all?fields=name,idd,flags';
 
   constructor(private http: HttpClient) {}
 
